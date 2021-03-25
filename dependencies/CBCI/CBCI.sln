@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31025.194
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VRPSolver", "VRPSolver.vcxproj", "{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CBCI", "dependencies\CBCI\CBCI.vcxproj", "{03573B0A-B331-4183-9325-A9465C605D80}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CBCI", "CBCI.vcxproj", "{03573B0A-B331-4183-9325-A9465C605D80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Debug|x64.ActiveCfg = Debug|x64
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Debug|x64.Build.0 = Debug|x64
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Debug|x86.ActiveCfg = Debug|Win32
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Debug|x86.Build.0 = Debug|Win32
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Release|x64.ActiveCfg = Release|x64
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Release|x64.Build.0 = Release|x64
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Release|x86.ActiveCfg = Release|Win32
-		{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}.Release|x86.Build.0 = Release|Win32
 		{03573B0A-B331-4183-9325-A9465C605D80}.Debug|x64.ActiveCfg = Debug|x64
 		{03573B0A-B331-4183-9325-A9465C605D80}.Debug|x64.Build.0 = Debug|x64
 		{03573B0A-B331-4183-9325-A9465C605D80}.Debug|x86.ActiveCfg = Debug|Win32
@@ -36,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BF3E711E-CD47-4349-B415-B92B056B76F0}
+		SolutionGuid = {DEBA3395-0A7A-4465-BBEE-FCFDB6FDEC75}
 	EndGlobalSection
 EndGlobal
