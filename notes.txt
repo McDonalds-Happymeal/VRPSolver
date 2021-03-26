@@ -1,0 +1,2 @@
+Release build notes:
+Glew changed .lib name with diffrent platforms and configs.
