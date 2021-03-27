@@ -9,14 +9,19 @@
 #include <fstream>
 #include <sstream>
 
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x) GLClearError();x;ASSERT(GLCheckError());
+
 static void GLClearError() {
     while (glGetError());
 }
 
-static void GLCheckError() {
+static bool GLCheckError() {
     while (GLenum error = glGetError()) {
         std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+        return false;
     }
+    return true;
 }
 
 static std::string ParseShader(const std::string& filepath) {
@@ -157,9 +162,7 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-        GLClearError();
-        glDrawElements(GL_LINES, 6, GL_INT, nullptr);
-        GLCheckError();
+        GLCall(glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, nullptr));
         //glDrawElements(GL_TRIANGLES, 3, );
 
         /* Swap front and back buffers */
