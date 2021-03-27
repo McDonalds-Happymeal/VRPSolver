@@ -22,6 +22,8 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="resources\shaders\BasicFragment.shader" />
+    <None Include="resources\shaders\BasicVertex.Shader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />
