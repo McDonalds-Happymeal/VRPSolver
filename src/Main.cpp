@@ -10,20 +10,9 @@
 #include <sstream>
 #include <memory>
 
-#define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();x;ASSERT(GLCheckError(#x,__FILE__,__LINE__));
-
-static void GLClearError() {
-    while (glGetError());
-}
-
-static bool GLCheckError(const char* function, const char*file, int line) {
-    while (GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
-        return false;
-    }
-    return true;
-}
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 static std::string ParseShader(const std::string& filepath) {
     std::ifstream stream(filepath);
@@ -154,20 +143,12 @@ int main(int argc, char** argv) {
     GLCall(glGenVertexArrays(1, &vao));
     GLCall(glBindVertexArray(vao));
 
-    unsigned int buffer;
-    GLCall(glGenBuffers(1, &buffer));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), points, GL_STATIC_DRAW));
+    VertexBuffer *vertexBuffer = new VertexBuffer(points, 2 * 4 * sizeof(float));
 
     GLCall(glEnableVertexAttribArray(0));
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));//binds buffer to VAO
 
-
-    unsigned int bufferIndex;
-    GLCall(glGenBuffers(1, &bufferIndex));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndex));
-    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
-
+    IndexBuffer *indexBuffer = new IndexBuffer(indices, 6);
 
     std::string vertexShader = ParseShader("resources/shaders/BasicVertex.Shader");
     std::string fragmentShader = ParseShader("resources/shaders/BasicFragment.Shader");
@@ -184,6 +165,11 @@ int main(int argc, char** argv) {
     ASSERT(location != -1);
     GLCall(glUniform4f(location, 0.2f, 0.8f, 0.8f, 1.0f));
 
+    GLCall(glBindVertexArray(0));
+    GLCall(glUseProgram(0));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
     float r = 0.0f, g = 0.5f, b = 1.0f;
     float increment[3] = { 0.05f, 0.051f, 0.052f };
 
@@ -191,12 +177,15 @@ int main(int argc, char** argv) {
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        GLCall(glUseProgram(shader));
         GLCall(glUniform4f(location, r, g, b, 1.0f));
+
+        GLCall(glBindVertexArray(vao));
+        indexBuffer->Bind();
+
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-        //glDrawElements(GL_TRIANGLES, 3, );
 
         neon(&r, &increment[0]);
         neon(&g, &increment[1]);
@@ -209,6 +198,9 @@ int main(int argc, char** argv) {
         glfwPollEvents();
     }
     glDeleteProgram(shader);
+
+    delete indexBuffer;
+    delete vertexBuffer;
 
     glfwTerminate();
     return 0;
