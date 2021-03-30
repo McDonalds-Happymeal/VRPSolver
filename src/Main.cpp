@@ -8,17 +8,18 @@
 #include <assert.h> 
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 #define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();x;ASSERT(GLCheckError());
+#define GLCall(x) GLClearError();x;ASSERT(GLCheckError(#x,__FILE__,__LINE__));
 
 static void GLClearError() {
     while (glGetError());
 }
 
-static bool GLCheckError() {
+static bool GLCheckError(const char* function, const char*file, int line) {
     while (GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
         return false;
     }
     return true;
@@ -49,11 +50,12 @@ static unsigned int CompileShader(unsigned int type, const std::string& source) 
     if (state == GL_FALSE) {
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(length * sizeof(char));//allows stack allocation to avoid heap.
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Shader complie failure: " << message << std::endl;
+        char* infoLog = new char[length];
+        glGetShaderInfoLog(id, length, &length, infoLog);
+        std::cout << "Shader complie failure: " << infoLog << std::endl;
 
         glDeleteShader(id);
+        delete[] infoLog;
         return 0;
     }
 
@@ -87,26 +89,42 @@ int helloWorld(int argc, std::string* argv) {
 	return 1;
 }
 
+static void neon(float* val, float* increment) {
+    if (*val > 1.0f)
+        *increment = -*increment;
+    else if (*val < 0.0f)
+        *increment = -*increment;
+
+    *val += *increment;
+}
+    
 int main(int argc, char** argv) {
 
+    //INITIATING GLFW, GLEW , and contexts.
     GLFWwindow* window;
+    GLFWmonitor* moniter;
 
-    /* Initialize glfw library */
     if (!glfwInit())
         return -1;
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    moniter= glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(moniter);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);//mode->height
     if (!window)
     {
         glfwTerminate();
         return -1;
     }
 
-
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);//sets frame rate to moniters
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -114,34 +132,41 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    std::cout << "openGL version: " <<  glGetString(GL_VERSION) << std::endl;
+    std::cout << "openGL version: " << glGetString(GL_VERSION) << std::endl;
+
+    //DATA FOR GPU-------------------------------------------------------
+
+    float p = 0.9f;
 
     float points[8] = {
-       -0.5f,-0.5f,
-        0.5f,-0.5f,
-        0.5f, 0.5f,
-       -0.5f, 0.5f,
+       -p,-p,
+        p,-p,
+        p, p,
+       -p, p,
     };
 
     unsigned int indices[] = {
         0,1,2,
-        3,0,2
+        2,3,0
     };
 
+    unsigned int vao;
+    GLCall(glGenVertexArrays(1, &vao));
+    GLCall(glBindVertexArray(vao));
 
     unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), points, GL_STATIC_DRAW);
-    
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    GLCall(glGenBuffers(1, &buffer));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
+    GLCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), points, GL_STATIC_DRAW));
+
+    GLCall(glEnableVertexAttribArray(0));
+    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
 
 
     unsigned int bufferIndex;
-    glGenBuffers(1, &bufferIndex);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndex);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+    GLCall(glGenBuffers(1, &bufferIndex));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndex));
+    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
 
 
     std::string vertexShader = ParseShader("resources/shaders/BasicVertex.Shader");
@@ -155,6 +180,13 @@ int main(int argc, char** argv) {
     unsigned int shader = CreateShader(vertexShader, fragmentShader);
     glUseProgram(shader);
 
+    GLCall(int location = glGetUniformLocation(shader, "u_Color"));
+    ASSERT(location != -1);
+    GLCall(glUniform4f(location, 0.2f, 0.8f, 0.8f, 1.0f));
+
+    float r = 0.0f, g = 0.5f, b = 1.0f;
+    float increment[3] = { 0.05f, 0.051f, 0.052f };
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -162,8 +194,13 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-        GLCall(glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, nullptr));
+        GLCall(glUniform4f(location, r, g, b, 1.0f));
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         //glDrawElements(GL_TRIANGLES, 3, );
+
+        neon(&r, &increment[0]);
+        neon(&g, &increment[1]);
+        neon(&b, &increment[2]);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
