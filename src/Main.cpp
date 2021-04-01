@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 static std::string ParseShader(const std::string& filepath) {
     std::ifstream stream(filepath);
@@ -139,14 +140,18 @@ int main(int argc, char** argv) {
         2,3,0
     };
 
-    unsigned int vao;
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
+    //unsigned int vao;
+    //GLCall(glGenVertexArrays(1, &vao));
+    //GLCall(glBindVertexArray(vao));
 
-    VertexBuffer *vertexBuffer = new VertexBuffer(points, 2 * 4 * sizeof(float));
+    VertexArray* vertexArray = new VertexArray();
+    VertexBuffer* vertexBuffer = new VertexBuffer(points, 2 * 4 * sizeof(float));
 
-    GLCall(glEnableVertexAttribArray(0));
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));//binds buffer to VAO
+    VertexBufferAttributes layout;
+    layout.Push(GL_FLOAT,2);
+    vertexArray->AddBuffer(*vertexBuffer, layout);
+
+
 
     IndexBuffer *indexBuffer = new IndexBuffer(indices, 6);
 
@@ -165,13 +170,8 @@ int main(int argc, char** argv) {
     ASSERT(location != -1);
     GLCall(glUniform4f(location, 0.2f, 0.8f, 0.8f, 1.0f));
 
-    GLCall(glBindVertexArray(0));
-    GLCall(glUseProgram(0));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
     float r = 0.0f, g = 0.5f, b = 1.0f;
-    float increment[3] = { 0.05f, 0.051f, 0.052f };
+    float increment[3] = { 0.03f, 0.05f, 0.07f };
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
         GLCall(glUseProgram(shader));
         GLCall(glUniform4f(location, r, g, b, 1.0f));
 
-        GLCall(glBindVertexArray(vao));
+        vertexArray->Bind();
         indexBuffer->Bind();
 
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
@@ -201,6 +201,7 @@ int main(int argc, char** argv) {
 
     delete indexBuffer;
     delete vertexBuffer;
+    delete vertexArray;
 
     glfwTerminate();
     return 0;

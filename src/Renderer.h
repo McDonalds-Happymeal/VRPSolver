@@ -9,3 +9,5 @@
 void GLClearError();
 
 bool GLCheckError(const char* function, const char* file, int line);
+
+unsigned int SizeofGLType(unsigned int type);
