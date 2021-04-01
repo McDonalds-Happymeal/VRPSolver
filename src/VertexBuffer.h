@@ -1,4 +1,6 @@
 #pragma once
+#include "GLhelper.h"
+
 class VertexBuffer
 {
 private:

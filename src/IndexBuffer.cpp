@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
-#include "Renderer.h"
 
+//creates index buffer and stores index in rendereID.
 IndexBuffer::IndexBuffer(const unsigned int* bufferData, unsigned int _count) :count(_count)
 {
     GLCall(glGenBuffers(1, &rendererID));

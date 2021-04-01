@@ -1,13 +1,15 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <iostream>
 
-#define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();x;ASSERT(GLCheckError(#x,__FILE__,__LINE__));
+#include "VertexArray.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "GLhelper.h"
 
-void GLClearError();
 
-bool GLCheckError(const char* function, const char* file, int line);
-
-unsigned int SizeofGLType(unsigned int type);
+class Renderer {
+public:
+	void draw(VertexArray* va,IndexBuffer* ib, Shader* shader);
+	void Clear();
+};

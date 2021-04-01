@@ -1,6 +1,9 @@
 #pragma once
 #include "VertexBuffer.h"
 #include "VertexBufferAttributes.h"
+#include "GLhelper.h"
+
+//creates and handles Vertex arrays.
 
 class VertexArray
 {

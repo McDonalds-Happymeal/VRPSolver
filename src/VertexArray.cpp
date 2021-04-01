@@ -1,5 +1,6 @@
 #include "VertexArray.h"
-#include "Renderer.h"
+
+//creates and handles Vertex arrays.
 
 VertexArray::VertexArray() {
 	GLCall(glGenVertexArrays(1, &RendererID));
@@ -9,6 +10,7 @@ VertexArray::~VertexArray() {
 	GLCall(glDeleteVertexArrays(1, &RendererID));
 }
 
+//builds and binds vertex buffer attributes and connects to vertexbuffer.
 void VertexArray::AddBuffer(VertexBuffer& vertexBuffer, VertexBufferAttributes& layout)
 {
 	Bind();

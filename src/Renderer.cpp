@@ -1,31 +1,17 @@
 #include "Renderer.h"
 
-void GLClearError() {
-    while (glGetError());
-}
-
-bool GLCheckError(const char* function, const char* file, int line) {
-    while (GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
-        return false;
-    }
-    return true;
-}
-
-//find size of open GL types from GL common Enum. 
-unsigned int SizeofGLType(unsigned int type)
+void Renderer::draw(VertexArray* va, IndexBuffer* ib, Shader* shader)
 {
-    switch (type) {
-        case GL_BYTE: return(sizeof(GLbyte));
-        case GL_UNSIGNED_BYTE: return(sizeof(GLubyte));
-        case GL_SHORT: return(sizeof(GLshort));
-        case GL_UNSIGNED_SHORT: return(sizeof(GLushort));
-        case GL_INT: return (sizeof(GLint));
-        case GL_UNSIGNED_INT: return (sizeof(GLuint));
-        case GL_FLOAT: return (sizeof(GLfloat));
-        case GL_HALF_FLOAT: return (sizeof(GLhalf));
-        case GL_DOUBLE: return (sizeof(GLdouble));
-    }
-    ASSERT(false);
-    return 0;
+    shader->Bind();
+    //shader->SetUniform4f("u_Color", r, g, b, 1.0f);
+
+    va->Bind();
+    ib->Bind();
+
+    GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+}
+
+void Renderer::Clear()
+{
+    GLCall(glClear(GL_COLOR_BUFFER_BIT));
 }

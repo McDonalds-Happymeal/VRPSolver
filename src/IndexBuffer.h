@@ -1,4 +1,7 @@
 #pragma once
+#include "GLhelper.h"
+
+//stores and handels open GL index Buffers.
 class IndexBuffer
 {
 private:

@@ -14,64 +14,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
-
-static std::string ParseShader(const std::string& filepath) {
-    std::ifstream stream(filepath);
-    std::string line;
-    std::stringstream ss;
-
-    while (getline(stream, line)) {
-        ss << line << '\n';
-    }
-    
-    return ss.str();
-}
-
-using namespace CBCI;
-
-static unsigned int CompileShader(unsigned int type, const std::string& source) {
-    unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    int state;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &state);
-    if (state == GL_FALSE) {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* infoLog = new char[length];
-        glGetShaderInfoLog(id, length, &length, infoLog);
-        std::cout << "Shader complie failure: " << infoLog << std::endl;
-
-        glDeleteShader(id);
-        delete[] infoLog;
-        return 0;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-    assert(("vertex shader failure", vs));
-    assert(("fragment shader failure", fs));
-
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDetachShader(program, vs);
-    glDetachShader(program, fs);
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
+#include "Shader.h"
 
 int helloWorld(int argc, std::string* argv) {
 	std::cout << "Hello World! is running" << std::endl;
@@ -128,11 +71,12 @@ int main(int argc, char** argv) {
 
     float p = 0.9f;
 
-    float points[8] = {
+    float points[10] = {
        -p,-p,
         p,-p,
         p, p,
        -p, p,
+       0.0f,0.0f
     };
 
     unsigned int indices[] = {
@@ -140,52 +84,33 @@ int main(int argc, char** argv) {
         2,3,0
     };
 
-    //unsigned int vao;
-    //GLCall(glGenVertexArrays(1, &vao));
-    //GLCall(glBindVertexArray(vao));
-
     VertexArray* vertexArray = new VertexArray();
-    VertexBuffer* vertexBuffer = new VertexBuffer(points, 2 * 4 * sizeof(float));
+    VertexBuffer* vertexBuffer = new VertexBuffer(points, 2 * 5 * sizeof(float));
 
     VertexBufferAttributes layout;
     layout.Push(GL_FLOAT,2);
     vertexArray->AddBuffer(*vertexBuffer, layout);
 
-
-
     IndexBuffer *indexBuffer = new IndexBuffer(indices, 6);
 
-    std::string vertexShader = ParseShader("resources/shaders/BasicVertex.Shader");
-    std::string fragmentShader = ParseShader("resources/shaders/BasicFragment.Shader");
+    Shader* shader = new Shader("resources/shaders/BasicVertex.Shader", "resources/shaders/BasicFragment.Shader");
+    shader->Bind();
 
-    std::cout << "VERTEX" << std::endl;
-    std::cout << vertexShader << std::endl;
-    std::cout << "FRAGMENT" << std::endl;
-    std::cout << fragmentShader << std::endl;
-
-    unsigned int shader = CreateShader(vertexShader, fragmentShader);
-    glUseProgram(shader);
-
-    GLCall(int location = glGetUniformLocation(shader, "u_Color"));
-    ASSERT(location != -1);
-    GLCall(glUniform4f(location, 0.2f, 0.8f, 0.8f, 1.0f));
+    shader->SetUniform4f("u_Color", 0.2f, 0.8f, 0.8f, 1.0f);
 
     float r = 0.0f, g = 0.5f, b = 1.0f;
     float increment[3] = { 0.03f, 0.05f, 0.07f };
 
+    Renderer renderer;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        /*RENDER HERE*/
+        renderer.Clear();
+        shader->SetUniform4f("u_Color", r, g, b, 1.0f);
 
-        GLCall(glUseProgram(shader));
-        GLCall(glUniform4f(location, r, g, b, 1.0f));
-
-        vertexArray->Bind();
-        indexBuffer->Bind();
-
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        renderer.draw(vertexArray, indexBuffer, shader);
 
         neon(&r, &increment[0]);
         neon(&g, &increment[1]);
@@ -197,8 +122,8 @@ int main(int argc, char** argv) {
         /* Poll for and process events */
         glfwPollEvents();
     }
-    glDeleteProgram(shader);
 
+    delete shader;
     delete indexBuffer;
     delete vertexBuffer;
     delete vertexArray;
