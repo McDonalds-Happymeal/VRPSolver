@@ -1,5 +1,11 @@
 #include "Renderer.h"
 
+Renderer::Renderer(int points[], unsigned int distributionID, Color _bgColor)
+{
+
+}
+
+/*
 void Renderer::draw(VertexArray* va, IndexBuffer* ib, Shader* shader)
 {
     shader->Bind();
@@ -10,7 +16,7 @@ void Renderer::draw(VertexArray* va, IndexBuffer* ib, Shader* shader)
 
     GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
-
+*/
 void Renderer::Clear()
 {
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
