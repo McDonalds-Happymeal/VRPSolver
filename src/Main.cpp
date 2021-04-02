@@ -16,6 +16,8 @@
 #include "VertexArray.h"
 #include "Shader.h"
 
+#include "Layer.h"
+
 int helloWorld(int argc, std::string* argv) {
 	std::cout << "Hello World! is running" << std::endl;
 
@@ -84,33 +86,26 @@ int main(int argc, char** argv) {
         2,3,0
     };
 
-    VertexArray* vertexArray = new VertexArray();
-    VertexBuffer* vertexBuffer = new VertexBuffer(points, 2 * 5 * sizeof(float));
-
-    VertexBufferAttributes layout;
-    layout.Push(GL_FLOAT,2);
-    vertexArray->AddBuffer(*vertexBuffer, layout);
-
-    IndexBuffer *indexBuffer = new IndexBuffer(indices, 6);
 
     Shader* shader = new Shader("resources/shaders/BasicVertex.Shader", "resources/shaders/BasicFragment.Shader");
-    shader->Bind();
 
-    shader->SetUniform4f("u_Color", 0.2f, 0.8f, 0.8f, 1.0f);
+    Color red = { 1.0f,0.0f,0.0f,1.0f };
+    Layer2D* test = new Layer2D(shader,points,5, red);
+    test->SetDefaultIndexBuffer(indices, 6);
+
 
     float r = 0.0f, g = 0.5f, b = 1.0f;
     float increment[3] = { 0.03f, 0.05f, 0.07f };
 
-    Renderer renderer;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /*RENDER HERE*/
-        renderer.Clear();
-        shader->SetUniform4f("u_Color", r, g, b, 1.0f);
-
-        renderer.draw(vertexArray, indexBuffer, shader);
+        glEnable(GL_POINT_SMOOTH);
+        glPointSize(5);
+        test->drawIndex(GL_TRIANGLES);
+        test->drawVertex(GL_POINTS, { r,g,b,1.0f });
 
         neon(&r, &increment[0]);
         neon(&g, &increment[1]);
@@ -124,9 +119,7 @@ int main(int argc, char** argv) {
     }
 
     delete shader;
-    delete indexBuffer;
-    delete vertexBuffer;
-    delete vertexArray;
+
 
     glfwTerminate();
     return 0;

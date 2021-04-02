@@ -13,31 +13,14 @@
 //Specialised renderer for rendering in real time VRP solution calls.
 //once flag bool completed is set true, renderer will show found solution.
 
-struct Color {
-	float r;
-	float g;
-	float b;
-	float a;
-};
-
-Color ColorWhite = { 0.0f,0.0f,0.0f,1.0f };
-Color ColorRed = { 1.0f,0.0f,0.0f,1.0f };
-Color ColorGreen = { 0.0f,1.0f,0.0f,1.0f };
-Color ColorBlue = { 0.0f,0.0f,1.0f,1.0f };
-Color ColorBlack = { 1.0f,1.0f,1.0f,1.0f };
-
-struct Edge {
-	unsigned int x;
-	unsigned int y;
-};
-
-
+/*
 class Renderer {
 private:
-	VertexArray *backgroundVA = new VertexArray();
+	Shader* shader;
+	VertexArray* backgroundVA;
+	VertexBuffer* backgroundVB;
 	IndexBuffer backgroundIB;
 
-	Shader shader;
 	VertexArray points;
 	IndexBuffer distributionIndex;
 	bool completed = false;
@@ -62,6 +45,8 @@ public:
 	unsigned int distributionScale = 7;
 
 	Renderer(int points[],unsigned int distributionID, Color _bgColor = ColorWhite);
+	~Renderer();
 	void draw();
 	void Clear();
 };
+*/

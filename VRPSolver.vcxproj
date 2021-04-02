@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\GLhelper.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
@@ -178,6 +179,7 @@
     <Text Include="notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\GLhelper.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\IndexBuffer.h" />
