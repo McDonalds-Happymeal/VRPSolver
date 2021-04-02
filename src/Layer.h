@@ -27,8 +27,8 @@ public:
 
 	void drawIndex(unsigned int drawmode, Color c);
 	void drawIndex(unsigned int drawmode);
-	//void drawIndex(IndexBuffer* tmpIB,unsigned int drawmode, Color c);
-	//void drawIndex(IndexBuffer* tmpIB, unsigned int drawmode);
+	void drawIndex(IndexBuffer* tmpIB,unsigned int drawmode, Color c);
+	void drawIndex(IndexBuffer* tmpIB, unsigned int drawmode);
 
 	void drawVertex(unsigned int drawmode, Color c);
 	void drawVertex(unsigned int drawmode);

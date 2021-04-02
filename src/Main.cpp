@@ -85,11 +85,17 @@ int main(int argc, char** argv) {
         0,1,2,
         2,3,0
     };
+    unsigned int indices2[] = {
+        4,0,1,4,2,3
+    };
 
 
     Shader* shader = new Shader("resources/shaders/BasicVertex.Shader", "resources/shaders/BasicFragment.Shader");
 
+    IndexBuffer* tmp = new IndexBuffer(indices2, 6);
+
     Color red = { 1.0f,0.0f,0.0f,1.0f };
+    Color green = { 0.0f,1.0f,0.0f,1.0f };
     Layer2D* test = new Layer2D(shader,points,5, red);
     test->SetDefaultIndexBuffer(indices, 6);
 
@@ -103,9 +109,11 @@ int main(int argc, char** argv) {
     {
         /*RENDER HERE*/
         glEnable(GL_POINT_SMOOTH);
-        glPointSize(5);
+        glPointSize(20);
         test->drawIndex(GL_TRIANGLES);
+        test->drawIndex(tmp, GL_TRIANGLES, green);
         test->drawVertex(GL_POINTS, { r,g,b,1.0f });
+        
 
         neon(&r, &increment[0]);
         neon(&g, &increment[1]);

@@ -44,21 +44,6 @@ void Layer2D::UnSetDefaultIndexBuffer()
 }
 
 
-void Layer2D::drawIndex(unsigned int drawmode, Color c)
-{
-	if (indexSet) {
-		shader->Bind();
-		shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
-		vertexArray->Bind();
-		indexBuffer->Bind();
-		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(),GL_UNSIGNED_INT, nullptr));
-		vertexArray->Unbind();
-	} 
-	else {
-		return;
-	}
-}
-
 void Layer2D::drawIndex(unsigned int drawmode)
 {
 	if (indexSet) {
@@ -66,6 +51,52 @@ void Layer2D::drawIndex(unsigned int drawmode)
 		shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
 		vertexArray->Bind();
 		indexBuffer->Bind();
+		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+		vertexArray->Unbind();
+	}
+	else {
+		return;
+	}
+}
+
+void Layer2D::drawIndex(unsigned int drawmode, Color c)
+{
+	if (indexSet) {
+		shader->Bind();
+		shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
+		vertexArray->Bind();
+		indexBuffer->Bind();
+		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+		vertexArray->Unbind();
+	}
+	else {
+		return;
+	}
+}
+
+void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode)
+{
+	if (indexSet) {
+		shader->Bind();
+		shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
+		vertexArray->Bind();
+		tmpIB->Bind();
+		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+		vertexArray->Unbind();
+	}
+	else {
+		return;
+	}
+}
+
+
+void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode, Color c)
+{
+	if (indexSet) {
+		shader->Bind();
+		shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
+		vertexArray->Bind();
+		tmpIB->Bind();
 		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
 		vertexArray->Unbind();
 	}
