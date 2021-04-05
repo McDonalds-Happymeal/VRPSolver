@@ -1,13 +1,13 @@
 #include "Layer.h"
 
-//count size of data / 2. for 2d array.
+//count = length of data. for 2d array.
 Layer2D::Layer2D(Shader* _shader, const float* data, unsigned int size, Color c)
 {
 	count = size;
 	//sets up buffers with all data.
 	this->shader = _shader;
 	defaultColor = c;
-	vertexBuffer = new VertexBuffer(data, 2*size*sizeof(float));
+	vertexBuffer = new VertexBuffer(data, size*sizeof(float));
 	VertexBufferAttributes layout;
 	layout.Push(GL_FLOAT, 2);
 	vertexArray = new VertexArray();

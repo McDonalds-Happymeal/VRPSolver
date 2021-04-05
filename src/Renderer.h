@@ -1,52 +1,33 @@
 #pragma once
 
-#include <GL/glew.h>
-
+#include <algorithm>
 #include <vector>
-#include <queue>
+#include <iostream>
 
-#include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+
+//GL related helpers
+#include "shader.h"
 #include "GLhelper.h"
+#include "Layer.h"
 
-//Specialised renderer for rendering in real time VRP solution calls.
-//once flag bool completed is set true, renderer will show found solution.
-
-/*
 class Renderer {
 private:
 	Shader* shader;
-	VertexArray* backgroundVA;
-	VertexBuffer* backgroundVB;
-	IndexBuffer backgroundIB;
-
-	VertexArray points;
-	IndexBuffer distributionIndex;
-	bool completed = false;
-
-	std::vector<IndexBuffer> completedRoutes;
-	//IndexBuffer tmpDraw;
-	//std::queue<edge> tmpDrawQueue;
-
-	void DrawBG();
-	void DrawVertexPoints(VertexArray* va, Color c);
-	void DrawIndexPoints(VertexArray* va, Color c);
-	void DrawIndexLine(VertexArray* va, IndexBuffer* ib, Color c);
-	void DrawTriangle(VertexArray* va, IndexBuffer* ib, Color c);
+	Layer2D* background;
+	Layer2D* points;
 
 
-	void Drawcompleted();
+	bool completed;
+	void Draw();
 public:
-	Color bgColor = ColorWhite;
-	Color pointsColor = ColorRed;
-	Color distributionColor = ColorBlack;
-	unsigned int scale = 5;
-	unsigned int distributionScale = 7;
-
-	Renderer(int points[],unsigned int distributionID, Color _bgColor = ColorWhite);
+	Renderer(std::vector<double> points, Color pointsC = { 1.0f,0.0f,0.0f,1.0f }, Color bgC = { 0.0f,0.0f,0.0f,1.0f });
 	~Renderer();
-	void draw();
-	void Clear();
+
+	void SetIndexColor(const unsigned int* index, Color c);
+
+	int Run(std::string name,unsigned int moniter = NULL);
+	void Completed();
+	void AddCompleted();
 };
-*/

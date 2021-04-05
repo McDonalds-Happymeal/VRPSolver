@@ -18,6 +18,7 @@ std::string Shader::ParseShader(const std::string& filepath) {
 
 //creates program by compiling given vertex and fragment shader code.
 unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
+
     GLCall(unsigned int program = glCreateProgram());
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
