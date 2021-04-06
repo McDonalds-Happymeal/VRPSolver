@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Renderer.h"
+#include "Window.h"
 
 int helloWorld(int argc, std::string* argv) {
 	std::cout << "Hello World! is running" << std::endl;
@@ -28,7 +29,10 @@ int main(int argc, char** argv) {
     }
 
 
-    Renderer render(points);
-    int z = render.Run("hello world!");
-    if (z != 0) std::cout << "SOMTHING WENT WRONG!!!!" << std::endl;
+    Renderer render;
+    Window window(&render, 2);
+    window.CreateWindow("hello World!");
+    render.Init(points);
+    window.Run();
+
 }
