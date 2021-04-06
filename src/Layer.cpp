@@ -1,5 +1,6 @@
 #include "Layer.h"
 
+
 //count = length of data. for 2d array.
 Layer2D::Layer2D(Shader* _shader, const float* data, unsigned int size, Color c)
 {
@@ -76,33 +77,25 @@ void Layer2D::drawIndex(unsigned int drawmode, Color c)
 
 void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode)
 {
-	if (indexSet) {
-		shader->Bind();
-		shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
-		vertexArray->Bind();
-		tmpIB->Bind();
-		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
-		vertexArray->Unbind();
-	}
-	else {
-		return;
-	}
+	shader->Bind();
+	shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
+	vertexArray->Bind();
+	tmpIB->Bind();
+	GLCall(glDrawElements(drawmode, tmpIB->GetCount(), GL_UNSIGNED_INT, nullptr));
+	vertexArray->Unbind();
 }
 
 
 void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode, Color c)
 {
-	if (indexSet) {
-		shader->Bind();
-		shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
-		vertexArray->Bind();
-		tmpIB->Bind();
-		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
-		vertexArray->Unbind();
-	}
-	else {
-		return;
-	}
+
+	shader->Bind();
+	shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
+	vertexArray->Bind();
+	tmpIB->Bind();
+	GLCall(glDrawElements(drawmode, tmpIB->GetCount(), GL_UNSIGNED_INT, nullptr));
+	vertexArray->Unbind();
+
 }
 
 void Layer2D::drawVertex(unsigned int drawmode, Color c)
@@ -121,4 +114,8 @@ void Layer2D::drawVertex(unsigned int drawmode)
 	vertexArray->Bind();
 	GLCall(glDrawArrays(drawmode, 0, count));
 	vertexArray->Unbind();
+}
+
+LayerIndex::LayerIndex(const unsigned int* indices, unsigned int count, unsigned int _drawmode, Color _color) : drawmode(_drawmode) , color(_color) {
+	indexBuffer = new IndexBuffer(indices, count);
 }

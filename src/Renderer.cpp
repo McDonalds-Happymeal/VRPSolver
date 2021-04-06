@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+
+
 Renderer::Renderer() {
 }
 
@@ -37,11 +39,57 @@ void Renderer::Init(std::vector<double> points, Color pointsC, Color bgC)
 
 	this->background = new Layer2D(shader, bgvertex, 8, bgC);//white background
 	this->background->SetDefaultIndexBuffer(bgindex, 6);
-
 }
+
+void Renderer::SetIndexColor(std::vector<unsigned int>index, Color c)
+{
+	pointsColors.push_back(LayerIndex(&index[0], index.size(), GL_POINTS, c));
+}
+
+void Renderer::SetIndexColor(unsigned int index, Color c)
+{
+	pointsColors.push_back(LayerIndex(&index, 1, GL_POINTS, c));
+}
+
+void Renderer::ClearIndexColors()
+{
+	pointsColors.clear();
+}
+
+void Renderer::DrawLines(std::vector<unsigned int> index, Color c, bool connected)
+{
+	if (connected) edges.push_back(LayerIndex(&index[0], index.size(), GL_LINE_STRIP, c));
+	else edges.push_back(LayerIndex(&index[0], index.size(), GL_LINES, c));
+}
+
+void Renderer::ClearLines()
+{
+}
+
 
 void Renderer::Draw()
 {
+
 	background->drawIndex(GL_TRIANGLES);
+
+	if (!edges.empty()) {
+		for (std::vector<LayerIndex>::iterator layer = edges.begin(); layer != edges.end(); layer++) {
+			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
+		}
+	}
+
 	points->drawVertex(GL_POINTS);
+
+	if (!pointsColors.empty()) {
+		for (std::vector<LayerIndex>::iterator layer = pointsColors.begin(); layer != pointsColors.end(); layer++) {
+			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
+		}
+	}
 }
+
+void Renderer::SetScale(unsigned int scale)
+{
+	glPointSize(scale * 3);
+	glLineWidth(scale);
+}
+

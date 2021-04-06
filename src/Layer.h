@@ -34,3 +34,11 @@ public:
 	void drawVertex(unsigned int drawmode);
 
 };
+
+struct LayerIndex {
+	IndexBuffer* indexBuffer;
+	unsigned int drawmode;
+	Color color;
+
+	LayerIndex(const unsigned int* indices, unsigned int count, unsigned int _drawmode, Color _color);
+};

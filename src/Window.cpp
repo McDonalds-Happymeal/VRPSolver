@@ -90,9 +90,6 @@ void Window::Run()
 	//open GL some hardcoded things to make renders nicer.
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
-	//change these so not hard coded
-	glPointSize(20);
-	glLineWidth(10);
 
 	//MAIN RENDERER LOOP HERE!!!!
 	while (!glfwWindowShouldClose(window))

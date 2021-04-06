@@ -21,18 +21,28 @@ static void neon(float* val, float* increment) {
 int main(int argc, char** argv) {
 
     std::vector<double> points;
-    for (int x = 0; x < 15; x++) {
-        for (int y = 0; y < 15; y++) {
-            points.push_back(x);
+    for (int x = 0; x < 25; x++) {
+        for (int y = 0; y < 25; y++) {
             points.push_back(y);
+            points.push_back(x);
         }
     }
 
+    std::vector<unsigned int> bois = { 15,316,17,118,19,173 };
 
     Renderer render;
-    Window window(&render, 2);
+    Window window(&render, 0.75f);
     window.CreateWindow("hello World!");
+
     render.Init(points);
+
+
+    render.DrawLines(bois, {0.0f, 0.0f, 0.0f, 1.0f},true);
+    render.SetIndexColor(bois, { 0.0f,1.0f,0.0f,1.0f });
+    render.SetScale(5);
+
     window.Run();
+
+    
 
 }
