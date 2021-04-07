@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\DeliveryVehicles.cpp" />
+    <ClCompile Include="src\DeliveryPoint.cpp" />
     <ClCompile Include="src\Problem.cpp" />
     <ClCompile Include="src\Visualisation\Layer.cpp" />
     <ClCompile Include="src\Visualisation\GLhelper.cpp" />
@@ -181,6 +183,8 @@
     <Text Include="notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DeliveryVehicles.h" />
+    <ClInclude Include="src\DeliveryPoint.h" />
     <ClInclude Include="src\Problem.h" />
     <ClInclude Include="src\Visualisation\Layer.h" />
     <ClInclude Include="src\Visualisation\GLhelper.h" />
