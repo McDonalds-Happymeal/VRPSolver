@@ -4,7 +4,7 @@
 //count = length of data. for 2d array.
 Layer2D::Layer2D(Shader* _shader, const float* data, unsigned int size, Color c)
 {
-	count = size;
+	count = size/2;//draw call uses two data points.
 	//sets up buffers with all data.
 	this->shader = _shader;
 	defaultColor = c;

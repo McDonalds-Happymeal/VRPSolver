@@ -21,14 +21,29 @@ void Renderer::Init(std::vector<double> points, Color pointsC, Color bgC)
 
 	//INIT POINTS LAYER WITH NORMALISED POINTS + BORDER
 	double border = 0.9;//values 1 + % of minimum distance points and windows border.
-	//finds min max for normalisation
-	double min = (*std::min_element(points.begin(), points.end()));
-	double max = (*std::max_element(points.begin(), points.end()));
-	
 	std::vector<float> vertex;
+	//finds min max for normalisation
 
-	for(std::vector<double>::iterator it = points.begin();it != points.end();it++) {
-		vertex.push_back(static_cast<float>(((2*border)*(*it - min) / (max - min)))-border);//normlises all values in array to between -1 and 1 (/border val) and pushes to vertex float.
+	double xmin = points[0];
+	double ymin = points[1];
+	double xmax = points[0];
+	double ymax = points[1];
+
+	for (std::vector<double>::iterator it = points.begin(); it != points.end(); it++) {
+		xmin = (xmin > *it) ? *it : xmin;
+		xmax = (xmax < *it) ? *it : xmax;
+		if (it == points.end()) break;//incase !point.length%2 == 0
+		it++;
+		ymin = (ymin > *it) ? *it : ymin;
+		ymax = (ymax < *it) ? *it : ymax;
+	}
+	
+	//normlises all values in array to between -1 and 1 (/border val) and pushes to vertex float.
+	for(std::vector<double>::iterator it = points.begin();it != points.end(); it++) {
+		vertex.push_back(static_cast<float>((((*it-xmin)/(xmax-xmin))*2*border)-border));
+		if (it == points.end()) break;//incase !point.length%2 == 0
+		it++;
+		vertex.push_back(static_cast<float>((((*it - ymin) / (ymax - ymin)) * 2 * border) - border));
 	}
 
 	this->points =  new Layer2D(shader, &vertex[0], vertex.size(), pointsC);//makes points red by default.
@@ -69,7 +84,7 @@ void Renderer::ClearLines()
 
 void Renderer::Draw()
 {
-
+	
 	background->drawIndex(GL_TRIANGLES);
 
 	if (!edges.empty()) {
@@ -77,14 +92,15 @@ void Renderer::Draw()
 			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
 		}
 	}
-
+	
 	points->drawVertex(GL_POINTS);
-
+	
 	if (!pointsColors.empty()) {
 		for (std::vector<LayerIndex>::iterator layer = pointsColors.begin(); layer != pointsColors.end(); layer++) {
 			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
 		}
 	}
+	
 }
 
 void Renderer::SetScale(unsigned int scale)
