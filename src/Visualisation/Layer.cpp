@@ -13,68 +13,50 @@ Layer2D::Layer2D(Shader* _shader, const float* data, unsigned int size, Color c)
 	layout.Push(GL_FLOAT, 2);
 	vertexArray = new VertexArray();
 	vertexArray->AddBuffer(*vertexBuffer, layout);
+
+	//sets temp index buffer to be overwritten so that memebr varible is always initilised.
+	unsigned int tmp = { 0 };
+	indexBuffer = new IndexBuffer(&tmp, 1);
 }
 
 Layer2D::~Layer2D()
 {
+	//cleans up heap;
 	delete vertexBuffer;
 	delete vertexArray;
-	if (indexSet) delete indexBuffer;
-	
+	delete indexBuffer;
 }
 
 //sets index buffer with values replacing old if present and setting index set flag.
 //count should be number of values in indices.
 void Layer2D::SetDefaultIndexBuffer(const unsigned int* indices, unsigned int count)
 {
-	if (indexSet) {
-		delete indexBuffer;
-		indexBuffer = new IndexBuffer(indices, count);
-	}
-	else {
-		indexBuffer = new IndexBuffer(indices, count);
-		indexSet = true;
-	}
+	indexBuffer = new IndexBuffer(indices, count);
 }
 
-//shouldnt be used for completness sake.
-void Layer2D::UnSetDefaultIndexBuffer()
-{
-	delete indexBuffer;
-	indexSet = false;
-}
-
-
+//draws current default index with input drawmode.
 void Layer2D::drawIndex(unsigned int drawmode)
 {
-	if (indexSet) {
-		shader->Bind();
-		shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
-		vertexArray->Bind();
-		indexBuffer->Bind();
-		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
-		vertexArray->Unbind();
-	}
-	else {
-		return;
-	}
+	shader->Bind();
+	shader->SetUniform4f("u_Color", defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a);
+	vertexArray->Bind();
+	indexBuffer->Bind();
+	GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+	vertexArray->Unbind();
 }
 
+//draws current default index with input drawmode and color.
 void Layer2D::drawIndex(unsigned int drawmode, Color c)
 {
-	if (indexSet) {
-		shader->Bind();
-		shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
-		vertexArray->Bind();
-		indexBuffer->Bind();
-		GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
-		vertexArray->Unbind();
-	}
-	else {
-		return;
-	}
+	shader->Bind();
+	shader->SetUniform4f("u_Color", c.r, c.g, c.b, c.a);
+	vertexArray->Bind();
+	indexBuffer->Bind();
+	GLCall(glDrawElements(drawmode, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+	vertexArray->Unbind();
 }
 
+//draw a temporary index buffer with input drawmode.
 void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode)
 {
 	shader->Bind();
@@ -85,7 +67,7 @@ void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode)
 	vertexArray->Unbind();
 }
 
-
+//draw a temporary index buffer with input drawmode and color.
 void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode, Color c)
 {
 
@@ -98,6 +80,7 @@ void Layer2D::drawIndex(IndexBuffer* tmpIB, unsigned int drawmode, Color c)
 
 }
 
+//will draw all Vertex with input drawmode and color.
 void Layer2D::drawVertex(unsigned int drawmode, Color c)
 {
 	shader->Bind();
@@ -107,6 +90,7 @@ void Layer2D::drawVertex(unsigned int drawmode, Color c)
 	vertexArray->Unbind();
 }
 
+//will draw all Vertex with input drawmode.
 void Layer2D::drawVertex(unsigned int drawmode)
 {
 	shader->Bind();
@@ -116,6 +100,9 @@ void Layer2D::drawVertex(unsigned int drawmode)
 	vertexArray->Unbind();
 }
 
+
+/*-----------------------------------------------------------------------*/
+//index layer constructor.
 LayerIndex::LayerIndex(const unsigned int* indices, unsigned int count, unsigned int _drawmode, Color _color) : drawmode(_drawmode) , color(_color) {
 	indexBuffer = new IndexBuffer(indices, count);
 }

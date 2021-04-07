@@ -1,12 +1,14 @@
 #include "Renderer.h"
 
 
-
+//blank constructor all initilisation is done in INIT function.
+//not happy with this implmentation possible improvment?
 Renderer::Renderer() {
 }
 
 Renderer::~Renderer()
 {
+	//clear heap memory;
 	delete shader;
 	delete background;
 	delete points;

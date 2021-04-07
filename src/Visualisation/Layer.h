@@ -11,7 +11,6 @@ private:
 	VertexBuffer* vertexBuffer;
 	VertexArray* vertexArray;
 	IndexBuffer* indexBuffer;
-	bool indexSet = false;
 	unsigned int count;
 public:
 	Color defaultColor;
@@ -21,8 +20,6 @@ public:
 	~Layer2D();
 
 	void SetDefaultIndexBuffer(const unsigned int* indices, unsigned int count);
-
-	void UnSetDefaultIndexBuffer();
 
 
 	void drawIndex(unsigned int drawmode, Color c);
@@ -35,6 +32,8 @@ public:
 
 };
 
+
+//index layer is a layer composed purely of a index buffer and requires Layer 2D with vertex array to draw with.
 struct LayerIndex {
 	IndexBuffer* indexBuffer;
 	unsigned int drawmode;

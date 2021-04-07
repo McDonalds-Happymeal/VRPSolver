@@ -159,16 +159,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Layer.cpp" />
-    <ClCompile Include="src\GLhelper.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Problem.cpp" />
+    <ClCompile Include="src\Visualisation\Layer.cpp" />
+    <ClCompile Include="src\Visualisation\GLhelper.cpp" />
+    <ClCompile Include="src\Visualisation\Shader.cpp" />
+    <ClCompile Include="src\Visualisation\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
-    <ClCompile Include="src\VertexBufferAttributes.cpp" />
-    <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\Visualisation\Renderer.cpp" />
+    <ClCompile Include="src\Visualisation\VertexBuffer.cpp" />
+    <ClCompile Include="src\Visualisation\VertexArray.cpp" />
+    <ClCompile Include="src\Visualisation\VertexBufferAttributes.cpp" />
+    <ClCompile Include="src\Visualisation\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -180,15 +181,16 @@
     <Text Include="notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Layer.h" />
-    <ClInclude Include="src\GLhelper.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBufferAttributes.h" />
-    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Problem.h" />
+    <ClInclude Include="src\Visualisation\Layer.h" />
+    <ClInclude Include="src\Visualisation\GLhelper.h" />
+    <ClInclude Include="src\Visualisation\Shader.h" />
+    <ClInclude Include="src\Visualisation\IndexBuffer.h" />
+    <ClInclude Include="src\Visualisation\Renderer.h" />
+    <ClInclude Include="src\Visualisation\VertexBuffer.h" />
+    <ClInclude Include="src\Visualisation\VertexArray.h" />
+    <ClInclude Include="src\Visualisation\VertexBufferAttributes.h" />
+    <ClInclude Include="src\Visualisation\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

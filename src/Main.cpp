@@ -1,22 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "Renderer.h"
-#include "Window.h"
+#include "Visualisation/Renderer.h"
+#include "Visualisation/Window.h"
 
-int helloWorld(int argc, std::string* argv) {
-	std::cout << "Hello World! is running" << std::endl;
-
-	return 1;
-}
-
-static void neon(float* val, float* increment) {
-    if (*val > 1.0f)
-        *increment = -*increment;
-    else if (*val < 0.0f)
-        *increment = -*increment;
-
-    *val += *increment;
-}
     
 int main(int argc, char** argv) {
 
@@ -28,8 +14,6 @@ int main(int argc, char** argv) {
         }
     }
 
-    points.push_back(100);
-    points.push_back(250);
 
     std::vector<unsigned int> bois = { 3,4,8,3 };
 
