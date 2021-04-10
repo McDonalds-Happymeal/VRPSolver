@@ -21,10 +21,8 @@ private:
 	std::vector<LayerIndex> pointsColors;
 	std::vector<LayerIndex> edges;
 public:
-	Renderer();
+	Renderer(std::vector<double> points, Color pointsC = { 1.0f,0.0f,0.0f,1.0f }, Color bgC = { 1.0f,1.0f,1.0f,1.0f });
 	~Renderer();
-
-	void Init(std::vector<double> points, Color pointsC = { 1.0f,0.0f,0.0f,1.0f }, Color bgC = { 1.0f,1.0f,1.0f,1.0f });
 
 	void SetIndexColor(std::vector<unsigned int>index, Color c);
 	void SetIndexColor(unsigned int index, Color c);

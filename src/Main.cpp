@@ -9,11 +9,9 @@ int main(int argc, char** argv) {
     Problem problem(50, 4, 500);
     
 
-    Renderer render;
-    Window window(&render, 0.8f);
-    window.CreateWindow("hello World!");
+    Window window("hello World!", 0.8f, 0);
 
-    render.Init(problem.getCoords());
+    Renderer render = Renderer(problem.getCoords());
     render.SetIndexColor(problem.distributionIndex(), { 0.0f,0.0f,1.0f,1.0f });
 
 
@@ -23,7 +21,7 @@ int main(int argc, char** argv) {
 
     problem.printall();
 
-    window.Run();
+    window.Run(&render);
 
     
 

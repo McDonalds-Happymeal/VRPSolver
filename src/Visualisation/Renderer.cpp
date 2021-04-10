@@ -3,19 +3,8 @@
 
 //blank constructor all initilisation is done in INIT function.
 //not happy with this implmentation possible improvment?
-Renderer::Renderer() {
-}
-
-Renderer::~Renderer()
-{
-	//clear heap memory;
-	delete shader;
-	delete background;
-	delete points;
-}
-
 //defaults red points and white background;
-void Renderer::Init(std::vector<double> points, Color pointsC, Color bgC)
+Renderer::Renderer(std::vector<double> points, Color pointsC, Color bgC)
 {
 
 	//INIT SHADER-------------------------------------------------------
@@ -39,16 +28,16 @@ void Renderer::Init(std::vector<double> points, Color pointsC, Color bgC)
 		ymin = (ymin > *it) ? *it : ymin;
 		ymax = (ymax < *it) ? *it : ymax;
 	}
-	
+
 	//normlises all values in array to between -1 and 1 (/border val) and pushes to vertex float.
-	for(std::vector<double>::iterator it = points.begin();it != points.end(); it++) {
-		vertex.push_back(static_cast<float>((((*it-xmin)/(xmax-xmin))*2*border)-border));
+	for (std::vector<double>::iterator it = points.begin(); it != points.end(); it++) {
+		vertex.push_back(static_cast<float>((((*it - xmin) / (xmax - xmin)) * 2 * border) - border));
 		if (it == points.end()) break;//incase !point.length%2 == 0
 		it++;
 		vertex.push_back(static_cast<float>((((*it - ymin) / (ymax - ymin)) * 2 * border) - border));
 	}
 
-	this->points =  new Layer2D(shader, &vertex[0], vertex.size(), pointsC);//makes points red by default.
+	this->points = new Layer2D(shader, &vertex[0], vertex.size(), pointsC);//makes points red by default.
 
 	//INIT BACKGROUND
 	float bgvertex[8] = { -1.0f,-1.0f,-1.0f,1.0f,1.0f,1.0f,1.0f,-1.0f };
@@ -56,6 +45,14 @@ void Renderer::Init(std::vector<double> points, Color pointsC, Color bgC)
 
 	this->background = new Layer2D(shader, bgvertex, 8, bgC);//white background
 	this->background->SetDefaultIndexBuffer(bgindex, 6);
+}
+
+Renderer::~Renderer()
+{
+	//clear heap memory;
+	delete shader;
+	delete background;
+	delete points;
 }
 
 void Renderer::SetIndexColor(std::vector<unsigned int>index, Color c)
