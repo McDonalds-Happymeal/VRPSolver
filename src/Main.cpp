@@ -12,6 +12,7 @@ int main(int argc, char** argv) {
     Window window("hello World!", 0.8f, 0);
 
     Renderer render = Renderer(problem.getCoords());
+
     render.SetIndexColor(problem.distributionIndex(), { 0.0f,0.0f,1.0f,1.0f });
 
 

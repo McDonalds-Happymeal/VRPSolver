@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "GLhelper.h"
 
+/*
 class Layer2D
 {
 private:
@@ -40,4 +41,27 @@ struct LayerIndex {
 	Color color;
 
 	LayerIndex(const unsigned int* indices, unsigned int count, unsigned int _drawmode, Color _color);
+};*/
+
+class Layer {
+private:
+	Shader* shader;
+	VertexBuffer vertexBuffer;
+	VertexArray vertexArray;
+public:
+	Layer(Shader* _shader, const float* data, unsigned int size);
+	~Layer();
+
+	void draw(DrawProp i);
+};
+
+struct DrawProp {
+	DrawProp(const unsigned int* data, unsigned int count, unsigned int _drawmode, Color _color, float _scale);
+	~DrawProp();
+
+	IndexBuffer indexbuffer;
+	unsigned int count;
+	unsigned int drawmode;
+	Color color;
+	float scale;
 };

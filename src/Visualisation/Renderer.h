@@ -11,8 +11,7 @@
 #include "GLhelper.h"
 #include "Layer.h"
 
-
-
+/*
 class Renderer {
 private:
 	Shader* shader;
@@ -33,4 +32,26 @@ public:
 
 	void Draw();
 	void SetScale(unsigned int scale);
+};
+*/
+
+class Renderer {
+private:
+	Shader shader;
+	Layer background;
+	DrawProp background;
+	Layer points;
+	std::vector<DrawProp> pointsProperties;
+	std::vector<DrawProp> linesProperties;
+public:
+	Renderer(std::vector<double> points, Color bgC = { 1.0f,1.0f,1.0f,1.0f });
+	~Renderer();
+
+	void pointsProperties(std::vector<unsigned int>, Color color, float scale);
+	void pointsPropertiesClear();
+
+	void AddLine(std::vector<unsigned int>, Color color, float scale);
+	void LinesClear();
+
+	void Draw();
 };
