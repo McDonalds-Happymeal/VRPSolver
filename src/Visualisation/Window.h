@@ -6,7 +6,7 @@
 #include "GLFW/glfw3.h"
 #include "Renderer.h"
 
-
+//Window object is a container object for a glfw window context.
 class Window
 {
 private:

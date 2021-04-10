@@ -1,6 +1,6 @@
 #include "Window.h"
 
-
+//title is for window title, scale sets window reolution as % of shortest dimension, moniter > 0 wil lfullscreen on selected moniter.
 Window::Window(const char* title, float _scale, int _moniter) {
 	if (_scale > 1.0f) {
 		std::cout << "window scales higher then 1.0 may be larger then current screen resolution!" << std::endl;
@@ -54,7 +54,6 @@ Window::Window(const char* title, float _scale, int _moniter) {
 		throw std::exception("ERROR INITIALIZING GLEW!");
 	}
 
-
 	std::cout << "openGL version: " << glGetString(GL_VERSION) << std::endl;
 }
 
@@ -64,6 +63,7 @@ Window::~Window()
 	std::cout << "Window object Destroyed!!!" << std::endl;
 }
 
+//main run loop, will not return until termniated.
 void Window::Run(Renderer* renderer)
 {
 	//open GL some hardcoded things to make renders nicer.
@@ -83,6 +83,4 @@ void Window::Run(Renderer* renderer)
 		glfwPollEvents();
 	}
 	glfwTerminate();
-
-	//return 0;
 }
