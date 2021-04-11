@@ -1,15 +1,16 @@
 #include "Renderer.h"
 
-
-//blank constructor all initilisation is done in INIT function.
-//not happy with this implmentation possible improvment?
-//defaults red points and white background;
-Renderer::Renderer(std::vector<double> points, Color pointsC, Color bgC)
+Renderer::Renderer(std::vector<double> points, Color bgC) 
 {
+	//INIT background.
+	/*
+	float bgvertex[8] = { -1.0f,-1.0f,-1.0f,1.0f,1.0f,1.0f,1.0f,-1.0f };
+	this->background = new Layer(&shader, bgvertex, sizeof(float) * 8);
 
-	//INIT SHADER-------------------------------------------------------
-	this->shader = new Shader("resources/shaders/BasicVertex.Shader", "resources/shaders/BasicFragment.Shader");
-
+	unsigned int bgindex[6] = { 0,1,2,0,2,3 };
+	Color white{ 1.0f,1.0f,1.0f,1.0f };
+	this->backgroundProp = new DrawProp(bgindex, 6, GL_TRIANGLES, white, 1.0f);
+	*/
 	//INIT POINTS LAYER WITH NORMALISED POINTS + BORDER
 	double border = 0.9;//values 1 + % of minimum distance points and windows border.
 	std::vector<float> vertex;
@@ -37,74 +38,15 @@ Renderer::Renderer(std::vector<double> points, Color pointsC, Color bgC)
 		vertex.push_back(static_cast<float>((((*it - ymin) / (ymax - ymin)) * 2 * border) - border));
 	}
 
-	this->points = new Layer2D(shader, &vertex[0], vertex.size(), pointsC);//makes points red by default.
-
-	//INIT BACKGROUND
-	float bgvertex[8] = { -1.0f,-1.0f,-1.0f,1.0f,1.0f,1.0f,1.0f,-1.0f };
-	unsigned int bgindex[6] = { 0,1,2,0,2,3 };
-
-	this->background = new Layer2D(shader, bgvertex, 8, bgC);//white background
-	this->background->SetDefaultIndexBuffer(bgindex, 6);
+	this->points = new Layer(&shader, &vertex[0], sizeof(float) * vertex.size());
 }
 
-Renderer::~Renderer()
-{
-	//clear heap memory;
-	delete shader;
-	delete background;
-	delete points;
+Renderer::~Renderer() {
+	delete &shader;
+	delete &points;
+
 }
 
-void Renderer::SetIndexColor(std::vector<unsigned int>index, Color c)
-{
-	pointsColors.push_back(LayerIndex(&index[0], index.size(), GL_POINTS, c));
+void Renderer::Draw() {
+	background.draw(&backgroundProp);
 }
-
-void Renderer::SetIndexColor(unsigned int index, Color c)
-{
-	pointsColors.push_back(LayerIndex(&index, 1, GL_POINTS, c));
-}
-
-void Renderer::ClearIndexColors()
-{
-	pointsColors.clear();
-}
-
-void Renderer::DrawLines(std::vector<unsigned int> index, Color c, bool connected)
-{
-	if (connected) edges.push_back(LayerIndex(&index[0], index.size(), GL_LINE_STRIP, c));
-	else edges.push_back(LayerIndex(&index[0], index.size(), GL_LINES, c));
-}
-
-void Renderer::ClearLines()
-{
-}
-
-
-void Renderer::Draw()
-{
-	
-	background->drawIndex(GL_TRIANGLES);
-
-	if (!edges.empty()) {
-		for (std::vector<LayerIndex>::iterator layer = edges.begin(); layer != edges.end(); layer++) {
-			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
-		}
-	}
-	
-	points->drawVertex(GL_POINTS);
-	
-	if (!pointsColors.empty()) {
-		for (std::vector<LayerIndex>::iterator layer = pointsColors.begin(); layer != pointsColors.end(); layer++) {
-			points->drawIndex(layer->indexBuffer, layer->drawmode, layer->color);
-		}
-	}
-	
-}
-
-void Renderer::SetScale(unsigned int scale)
-{
-	glPointSize(scale * 3);
-	glLineWidth(scale);
-}
-

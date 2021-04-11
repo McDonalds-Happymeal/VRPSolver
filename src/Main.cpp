@@ -13,13 +13,11 @@ int main(int argc, char** argv) {
 
     Renderer render = Renderer(problem.getCoords());
 
-    render.SetIndexColor(problem.distributionIndex(), { 0.0f,0.0f,1.0f,1.0f });
+    //render.SetIndexColor(problem.distributionIndex(), { 0.0f,0.0f,1.0f,1.0f });
 
 
     //render.DrawLines(bois, {0.0f, 0.0f, 0.0f, 1.0f},true);
     //render.SetIndexColor(bois, { 0.0f,1.0f,0.0f,1.0f });
-    render.SetScale(5);
-
     problem.printall();
 
     window.Run(&render);

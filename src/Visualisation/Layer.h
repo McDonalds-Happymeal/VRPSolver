@@ -43,20 +43,8 @@ struct LayerIndex {
 	LayerIndex(const unsigned int* indices, unsigned int count, unsigned int _drawmode, Color _color);
 };*/
 
-class Layer {
-private:
-	Shader* shader;
-	VertexBuffer vertexBuffer;
-	VertexArray vertexArray;
-public:
-	Layer(Shader* _shader, const float* data, unsigned int size);
-	~Layer();
-
-	void draw(DrawProp i);
-};
-
 struct DrawProp {
-	DrawProp(const unsigned int* data, unsigned int count, unsigned int _drawmode, Color _color, float _scale);
+	DrawProp(unsigned int* data, unsigned int count, unsigned int _drawmode, Color _color, float _scale);
 	~DrawProp();
 
 	IndexBuffer indexbuffer;
@@ -65,3 +53,16 @@ struct DrawProp {
 	Color color;
 	float scale;
 };
+
+class Layer {
+private:
+	Shader* shader;
+	VertexBuffer vertexBuffer;
+	VertexArray vertexArray;
+public:
+	Layer(Shader* _shader,float* data, unsigned int size);
+	~Layer();
+
+	void draw(DrawProp* i);
+};
+

@@ -164,10 +164,10 @@
     <ClCompile Include="src\Problem.cpp" />
     <ClCompile Include="src\Visualisation\Layer.cpp" />
     <ClCompile Include="src\Visualisation\GLhelper.cpp" />
+    <ClCompile Include="src\Visualisation\Renderer.cpp" />
     <ClCompile Include="src\Visualisation\Shader.cpp" />
     <ClCompile Include="src\Visualisation\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Visualisation\Renderer.cpp" />
     <ClCompile Include="src\Visualisation\VertexBuffer.cpp" />
     <ClCompile Include="src\Visualisation\VertexArray.cpp" />
     <ClCompile Include="src\Visualisation\VertexBufferAttributes.cpp" />
