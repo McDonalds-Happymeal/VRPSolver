@@ -18,7 +18,7 @@ Layer::~Layer()
 void Layer::draw(DrawProp* i)
 {
 	shader->Bind();
-	shader->SetUniform4f("u_color", i->color.r, i->color.g, i->color.b, i->color.a);
+	shader->SetUniform4f("u_Color", i->color.r, i->color.g, i->color.b, i->color.a);
 	glPointSize(i->scale);
 	glLineWidth(i->scale);
 	vertexArray.Bind();

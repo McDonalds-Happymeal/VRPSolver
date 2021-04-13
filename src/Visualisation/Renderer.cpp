@@ -2,15 +2,6 @@
 
 Renderer::Renderer(std::vector<double> points, Color bgC) 
 {
-	//INIT background.
-	/*
-	float bgvertex[8] = { -1.0f,-1.0f,-1.0f,1.0f,1.0f,1.0f,1.0f,-1.0f };
-	this->background = new Layer(&shader, bgvertex, sizeof(float) * 8);
-
-	unsigned int bgindex[6] = { 0,1,2,0,2,3 };
-	Color white{ 1.0f,1.0f,1.0f,1.0f };
-	this->backgroundProp = new DrawProp(bgindex, 6, GL_TRIANGLES, white, 1.0f);
-	*/
 	//INIT POINTS LAYER WITH NORMALISED POINTS + BORDER
 	double border = 0.9;//values 1 + % of minimum distance points and windows border.
 	std::vector<float> vertex;
