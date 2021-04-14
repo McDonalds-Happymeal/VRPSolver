@@ -55,6 +55,10 @@ Window::Window(const char* title, float _scale, int _moniter) {
 	}
 
 	std::cout << "openGL version: " << glGetString(GL_VERSION) << std::endl;
+
+	//open GL some hardcoded things to make renders nicer.
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
 }
 
 
@@ -66,10 +70,6 @@ Window::~Window()
 //main run loop, will not return until termniated.
 void Window::Run(Renderer* renderer)
 {
-	//open GL some hardcoded things to make renders nicer.
-	glEnable(GL_POINT_SMOOTH);
-	glEnable(GL_LINE_SMOOTH);
-
 	//MAIN RENDERER LOOP HERE!!!!
 	while (!glfwWindowShouldClose(window))
 	{

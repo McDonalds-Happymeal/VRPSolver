@@ -39,4 +39,5 @@ DrawProp::DrawProp(unsigned int* data, unsigned int _count, unsigned int _drawmo
 
 DrawProp::~DrawProp()
 {
+
 }
