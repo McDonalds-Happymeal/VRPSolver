@@ -40,6 +40,11 @@ std::vector<double> Problem::getCoords()
 	return tmp;
 }
 
+std::vector<DeliveryPoint> Problem::getPointsData()
+{
+	return deliveries;
+}
+
 //returns index of distribution
 std::vector<unsigned int> Problem::distributionIndex()
 {

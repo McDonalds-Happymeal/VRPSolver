@@ -20,6 +20,7 @@ public:
 	~Problem();
 
 	std::vector<double> getCoords();
+	std::vector<DeliveryPoint> getPointsData();
 	std::vector<unsigned int> distributionIndex();
 	
 	void printall();
