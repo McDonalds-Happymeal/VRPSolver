@@ -1,13 +1,15 @@
 #include "Window.h"
+//window object handles glfw window creation.
 
-//title is for window title, scale sets window reolution as % of shortest dimension, moniter > 0 wil lfullscreen on selected moniter.
 Window::Window(const char* title, float _scale, int _moniter) {
+	//prints error msg if scale above shortest resolution dimension.
 	if (_scale > 1.0f) {
 		std::cout << "window scales higher then 1.0 may be larger then current screen resolution!" << std::endl;
 	}
 
 	if (!glfwInit()) throw std::exception("glfw failed to initialise!!!");
 
+	//creates array of moniter pointers and moniter count.
 	int moniterCount;
 	GLFWmonitor** moniters = glfwGetMonitors(&moniterCount);
 
@@ -37,7 +39,7 @@ Window::Window(const char* title, float _scale, int _moniter) {
 		window = glfwCreateWindow(resolution, resolution, title, NULL, NULL);
 	}
 
-
+	//checks window was creates succesfuly.
 	if (!window)
 	{
 		glfwTerminate();
@@ -48,12 +50,14 @@ Window::Window(const char* title, float _scale, int _moniter) {
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);//sets frame rate to moniters
 
+	//init glew and check for any init errors.
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		std::cout << glewGetErrorString(err) << std::endl;
 		throw std::exception("ERROR INITIALIZING GLEW!");
 	}
 
+	//prints openGL version.
 	std::cout << "openGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	//open GL some hardcoded things to make renders nicer.
@@ -64,7 +68,7 @@ Window::Window(const char* title, float _scale, int _moniter) {
 
 Window::~Window()
 {
-	std::cout << "Window object Destroyed!!!" << std::endl;
+	//std::cout << "Window object Destroyed!!!" << std::endl;
 }
 
 //main run loop, will not return until termniated.
@@ -74,6 +78,7 @@ void Window::Run(Renderer* renderer)
 	while (!glfwWindowShouldClose(window))
 	{
 		/*RENDER HERE*/
+		//uses draw fucntion from passed renderer pointer.
 		renderer->Draw();
 
 		/* Swap front and back buffers */

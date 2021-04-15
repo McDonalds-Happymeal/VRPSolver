@@ -5,6 +5,7 @@ Layer::Layer(Shader* _shader, float* data, unsigned int size) :
 {
 	shader = _shader;
 
+	//create vertex buffer attrib and puch data type and 2d coords layout.
 	VertexBufferAttributes layout;
 	layout.Push(GL_FLOAT, 2);
 
@@ -15,6 +16,8 @@ Layer::~Layer()
 {
 }
 
+//draws vertex with passed drawproperties.
+//not code be improved as rebinds vertex buffer everycall.
 void Layer::draw(DrawProp* i)
 {
 	shader->Bind();
@@ -29,6 +32,7 @@ void Layer::draw(DrawProp* i)
 	vertexArray.Unbind();
 }
 
+//creates draw properties object.
 DrawProp::DrawProp(unsigned int* data, unsigned int _count, unsigned int _drawmode, Color _color, float _scale) : indexbuffer(IndexBuffer(data, _count))
 {
 	count = _count;

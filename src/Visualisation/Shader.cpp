@@ -1,7 +1,7 @@
 #include "Shader.h"
 
 //all methods for loading parsing and creating a openGL program composing of a vertex and fragment shader.
-//unifroms also handeled withen class.
+//uniforms also handeled withen class.
 
 //reads file and returns content to string.
 std::string Shader::ParseShader(const std::string& filepath) {
@@ -67,8 +67,10 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
     std::string vertexShader = ParseShader(vertexPath);
     std::string fragmentShader = ParseShader(fragmentPath);
 
+#ifdef _DEBUG
     std::cout << "VERTEX SHADER CODE: " << std::endl << vertexShader;
     std::cout << "FRAGMENT SHADER CODE: " << std::endl << fragmentShader;
+#endif // _DEBUG
 
     RendererID = CreateShader(vertexShader, fragmentShader);
 }
