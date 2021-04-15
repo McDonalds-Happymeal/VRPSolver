@@ -159,9 +159,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\DeliveryVehicles.cpp" />
-    <ClCompile Include="src\DeliveryPoint.cpp" />
-    <ClCompile Include="src\Problem.cpp" />
+    <ClCompile Include="src\Solver\DeliveryVehicles.cpp" />
+    <ClCompile Include="src\Solver\DeliveryPoint.cpp" />
+    <ClCompile Include="src\Solver\Problem.cpp" />
     <ClCompile Include="src\Visualisation\Layer.cpp" />
     <ClCompile Include="src\Visualisation\GLhelper.cpp" />
     <ClCompile Include="src\Visualisation\Renderer.cpp" />
@@ -172,6 +172,7 @@
     <ClCompile Include="src\Visualisation\VertexArray.cpp" />
     <ClCompile Include="src\Visualisation\VertexBufferAttributes.cpp" />
     <ClCompile Include="src\Visualisation\Window.cpp" />
+    <ClCompile Include="src\threadFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -183,9 +184,9 @@
     <Text Include="notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DeliveryVehicles.h" />
-    <ClInclude Include="src\DeliveryPoint.h" />
-    <ClInclude Include="src\Problem.h" />
+    <ClInclude Include="src\Solver\DeliveryVehicles.h" />
+    <ClInclude Include="src\Solver\DeliveryPoint.h" />
+    <ClInclude Include="src\Solver\Problem.h" />
     <ClInclude Include="src\Visualisation\Layer.h" />
     <ClInclude Include="src\Visualisation\GLhelper.h" />
     <ClInclude Include="src\Visualisation\Shader.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\Visualisation\VertexArray.h" />
     <ClInclude Include="src\Visualisation\VertexBufferAttributes.h" />
     <ClInclude Include="src\Visualisation\Window.h" />
+    <ClInclude Include="src\threadFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

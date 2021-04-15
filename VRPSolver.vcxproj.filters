@@ -39,19 +39,22 @@
     <ClCompile Include="src\Visualisation\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Problem.cpp">
+    <ClCompile Include="src\Solver\Problem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\DeliveryPoint.cpp">
+    <ClCompile Include="src\Solver\DeliveryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\DeliveryVehicles.cpp">
+    <ClCompile Include="src\Solver\DeliveryVehicles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Visualisation\Layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Visualisation\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\threadFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,13 +95,16 @@
     <ClInclude Include="src\Visualisation\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Problem.h">
+    <ClInclude Include="src\Solver\Problem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\DeliveryPoint.h">
+    <ClInclude Include="src\Solver\DeliveryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\DeliveryVehicles.h">
+    <ClInclude Include="src\Solver\DeliveryVehicles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\threadFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
