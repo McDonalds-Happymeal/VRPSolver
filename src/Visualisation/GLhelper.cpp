@@ -3,6 +3,8 @@
 //helper functions and macros for writing openGL code common to many files.
 
 //clears error stream;
+#ifdef _DEBUG
+//clears openGL error stream;
 void GLClearError() {
     while (glGetError());
 }
@@ -15,6 +17,9 @@ bool GLCheckError(const char* function, const char* file, int line) {
     }
     return true;
 }
+#endif // DEBUG
+
+
 
 //find size of open GL types from GL common Enum. 
 unsigned int SizeofGLType(unsigned int type)
@@ -30,6 +35,6 @@ unsigned int SizeofGLType(unsigned int type)
         case GL_HALF_FLOAT: return (sizeof(GLhalf));
         case GL_DOUBLE: return (sizeof(GLdouble));
     }
-    ASSERT(false);
+    throw std::exception("ERROR TYPE NOT RECOGNISED!");
     return 0;
 }
