@@ -15,9 +15,9 @@ MessageCallback(GLenum source,
 }
 
 
-Renderer::Renderer(std::vector<double> points, Color bgC) 
+Renderer::Renderer(std::vector<double> points,std::shared_ptr<RenderData> _renderData, Color bgC)
 {
-
+	renderData = _renderData;
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
 
@@ -56,66 +56,80 @@ Renderer::Renderer(std::vector<double> points, Color bgC)
 Renderer::~Renderer() {
 	delete &shader;
 	delete &points;
-	delete &pointsMutex;
-	delete &linesMutex;
-
-	//deletes all heap allocated DrawProp objects.
-	pointsPropertiesClear();
 }
 
 void Renderer::pointsProperties(std::vector<unsigned int> data, Color color, float scale)
 {
-	pointsMutex->lock();
 	pointsPropertiesList.push_back(std::make_unique<DrawProp>(&data[0], data.size(), GL_POINTS, color, scale));
-	pointsMutex->unlock();
 }
 
 void Renderer::pointsProperties(unsigned int data, Color color, float scale)
 {
-	pointsMutex->lock();
 	pointsPropertiesList.push_back(std::make_unique<DrawProp>(&data, 1, GL_POINTS, color, scale));
-	pointsMutex->unlock();
 }
 
 void Renderer::pointsPropertiesClear()
 {
-	pointsMutex->lock();
 	pointsPropertiesList.clear();
-	pointsMutex->unlock();
 }
 
-void Renderer::AddLine(std::vector<unsigned int> data, Color color, float scale)
-{
-	linesMutex->lock();
-	linesPropertiesList.push_back(std::make_unique<DrawProp>(&data[0], data.size(), GL_LINE_STRIP, color, scale));
-	linesMutex->unlock();
-}
+
 
 void Renderer::Draw() {
+	
+	//test if new data availible, and then attempts lock.
+	if (!renderData->linesPropertiesList.empty()) {
+		if(renderData->mutex.try_lock()) {
+			//if lock made will update local line Properties list.
+			while (!renderData->linesPropertiesList.empty()) {
+				LinesTemplate &tmp = renderData->linesPropertiesList.front();
+				//blank lines vector interpretted as a local line properties clear call else adds to local list and pops from shared data queue
+				if (tmp.lines.empty()) linesPropertiesList.clear();
+				else linesPropertiesList.push_back(std::make_unique<DrawProp>(&tmp.lines[0], tmp.lines.size(), GL_LINE_STRIP, tmp.color, tmp.scale));
+				renderData->linesPropertiesList.pop();
+			}
+			renderData->mutex.unlock();
+		}
+	}
+	
+
 	background.draw(&backgroundProp);
 
-	if (linesMutex->try_lock()) {
-		if (!linesPropertiesList.empty()) {
-			for (std::vector<std::unique_ptr<DrawProp>>::iterator dp = linesPropertiesList.begin(); dp != linesPropertiesList.end(); ++dp) {
-				points->draw((*dp).get());
-			}
+
+	if (!linesPropertiesList.empty()) {
+		for (std::vector<std::unique_ptr<DrawProp>>::iterator dp = linesPropertiesList.begin(); dp != linesPropertiesList.end(); ++dp) {
+			points->draw((*dp).get());
 		}
-		linesMutex->unlock();
-	}
-	else {
-		std::cout << "lines lock failed!" << std::endl;
 	}
 
-
-	if (pointsMutex->try_lock()) {
-		if (!pointsPropertiesList.empty()) {
-			for (std::vector<std::unique_ptr<DrawProp>>::iterator dp = pointsPropertiesList.begin(); dp != pointsPropertiesList.end(); ++dp) {
-				points->draw((*dp).get());
-			}
+	if (!pointsPropertiesList.empty()) {
+		for (std::vector<std::unique_ptr<DrawProp>>::iterator dp = pointsPropertiesList.begin(); dp != pointsPropertiesList.end(); ++dp) {
+			points->draw((*dp).get());
 		}
-		pointsMutex->unlock();
 	}
-	else {
-		std::cout << "points lock failed!" << std::endl;
-	}
+}
+
+/*-------------------render data class--------------------*/
+
+RenderData::RenderData() {
+}
+
+RenderData::~RenderData(){
+}
+
+
+void RenderData::AddLine(std::vector<unsigned int> data, Color color, float scale)
+{
+	mutex.lock();
+	//linesPropertiesList.push_back(std::make_unique<DrawProp>(&data[0], data.size(), GL_LINE_STRIP, color, scale));
+	linesPropertiesList.push({ data,color,scale });
+	mutex.unlock();
+}
+
+void RenderData::LinesClear()
+{
+	mutex.lock();
+	//blank vector input will call clear line properties in renderer.
+	linesPropertiesList.push({ std::vector<unsigned int>{},{0,0,0,0},0});
+	mutex.unlock();
 }
