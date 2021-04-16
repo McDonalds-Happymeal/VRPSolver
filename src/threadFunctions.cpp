@@ -19,18 +19,19 @@ void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, floa
 
     std::vector<DeliveryPoint> p = problem.getPointsData();
 
-    unsigned int max = p[1].qauntitiy;
-    unsigned int min = p[1].qauntitiy;
-    for (std::vector<DeliveryPoint>::const_iterator it = p.begin(); it != p.end(); it++) {
+    //user index 1 as start to ignore distribution index.
+    double max = p[1].qauntitiy;
+    double min = p[1].qauntitiy;
+    for (std::vector<DeliveryPoint>::const_iterator it = p.begin()+2; it != p.end(); it++) {
         max = (max < it->qauntitiy) ? it->qauntitiy : max;
         min = (min > it->qauntitiy) ? it->qauntitiy : min;
     }
     //fix this!!!!!!!!!!!!!!!!!!!!!!!
-    //finds how mnay point size availible;
+    //finds how many point size availible;
     int bins = static_cast<int>(ceil((drawScale + (drawScale * pointsRange)) - (drawScale - (drawScale * pointsRange))));
 
-    int step = (max - min) / bins;
-    unsigned int tmpMax = min + step;
+    int step = static_cast<int>(ceil((max - min) / bins));
+    int tmpMax = static_cast<int> (min + step);
     std::vector<unsigned int> tmpBin;
     for (int x = 0; x <= bins; x++) {
         tmpBin.clear();
