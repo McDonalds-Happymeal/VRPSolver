@@ -5,15 +5,15 @@ void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, floa
     Window window("hello World!", windowScale, moniter);
 
     //how much points scale from default %
-    float pointsRange = 0.9f;
-    Color blue = { 0.0f,0.0f,1.0f,1.0f };
-    Color red = { 1.0f,0.0f,0.0f,1.0f };
+    float pointsRange = 0.5f;
+    Color blue = { 1.0f,1.0f,1.0f,1.0f };
+    Color red = { 1.0f,1.0f,1.0f,1.0f };
 
     /*---Create renderer and translate data from problem------*/
 
     float minPointSize = drawScale - (drawScale * pointsRange);
     //sends all points coords.
-    Renderer render = Renderer(problem.getCoords(), renderData);
+    Renderer render = Renderer(problem.getCoords(), renderData, { 0.0f,0.0f,0.0f,1.0f });
     //index 0 is distribution point.
     render.pointsProperties(0, blue, drawScale + (drawScale * pointsRange));
 

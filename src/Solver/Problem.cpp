@@ -15,7 +15,7 @@ Problem::Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int 
 		deliveries.push_back({x, tmpx,tmpy,tmpq });
 	}
 
-	for (unsigned int x = 0; x <= nVehicles; x++) {
+	for (unsigned int x = 0; x < nVehicles; x++) {
 		vehicles.push_back({x, vehCapacity });
 	}
 }
@@ -73,6 +73,5 @@ void Problem::printall()
 	std::cout << "\n\n" << deliveries.size() << " delivery points with a combined delivery qaunitity of " << tmpq << "." << std::endl;
 	std::cout << vehicles.size() << " delivery vehicles with a combined capacity of " << tmpc << "."
 		<< std::endl;
-	std::cout << "Estimated minimum number dispatches per vehicle : " << (tmpq / tmpc) + 1 << "." << std::endl;
-
+	if(tmpc >0) std::cout << "Estimated minimum number dispatches per vehicle : " << (tmpq / tmpc) + 1 << "." << std::endl;
 }

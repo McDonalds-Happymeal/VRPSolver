@@ -36,7 +36,7 @@ private:
 
 	unsigned int bgindex[6] = { 0,1,2,0,2,3 };
 	Color white{ 1.0f,1.0f,1.0f,1.0f };
-	DrawProp backgroundProp = DrawProp(bgindex, 6, GL_TRIANGLES, white, 1);
+	DrawProp backgroundProp = DrawProp(bgindex, 6, GL_TRIANGLES, { 0,0,0,1 }, 1);
 
 	//Layer data for all points.
 	Layer* points;
@@ -75,6 +75,7 @@ public:
 	~RenderData();
 
 	//empty vector will be inerpreted as a line clear call.
+	void tryAddLineClear(std::vector<unsigned int> data, Color color, float scale);
 	void AddLine(std::vector<unsigned int> data, Color color, float scale);
 	void LinesClear();
 };

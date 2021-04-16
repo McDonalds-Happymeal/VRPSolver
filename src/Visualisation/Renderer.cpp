@@ -30,7 +30,7 @@ Renderer::Renderer(std::vector<double> points,std::shared_ptr<RenderData> _rende
 	renderData = _renderData;
 
 	//INIT POINTS LAYER WITH NORMALISED POINTS + BORDER
-	double border = 0.9;//values 1 + % of minimum distance points and windows border.
+	double border = 0.95;//values 1 + % of minimum distance points and windows border.
 	std::vector<float> vertex;//tmp vector stores float data used to created vertex buffer
 
 	//finds min max for normalisation
@@ -135,6 +135,17 @@ void RenderData::AddLine(std::vector<unsigned int> data, Color color, float scal
 	mutex.lock();
 	linesPropertiesList.push({ data,color,scale });
 	mutex.unlock();
+}
+
+//add new lineTemplate in thread safe manner.
+void RenderData::tryAddLineClear(std::vector<unsigned int> data, Color color, float scale)
+{
+	if(mutex.try_lock()) {
+		linesPropertiesList.push({ std::vector<unsigned int>{},{0,0,0,0},0 });
+		linesPropertiesList.push({ data,color,scale });
+		mutex.unlock();
+	}
+	
 }
 
 //adds blank line properties tmeplate that will be interpreted as a local line properties clear when reahced by draw.
