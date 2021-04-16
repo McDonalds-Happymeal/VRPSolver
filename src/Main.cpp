@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
     std::thread renderer(renderThread,renderData, std::ref(problem), 0.8f, 0, 10.0f);
 
-    std::this_thread::sleep_for(std::chrono::seconds(10000));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     Solver solver(problem, renderData);
     solver.TSPSolver();

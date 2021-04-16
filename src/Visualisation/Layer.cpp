@@ -1,7 +1,7 @@
 #include "Layer.h"
 
 Layer::Layer(Shader* _shader, float* data, unsigned int size) :
-	vertexBuffer(VertexBuffer(data, size * sizeof(float)))
+	vertexBuffer(VertexBuffer(data, size))
 {
 	shader = _shader;
 
