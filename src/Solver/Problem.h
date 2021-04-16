@@ -14,14 +14,13 @@ private:
 	//stores all delivery points and distribution at index 0;
 	std::vector<DeliveryPoint> deliveries;
 	std::vector<DeliveryVehicles> vehicles;
-	DeliveryPoint distribution;
 public:
 	Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int vehCapacity);
 	~Problem();
 
 	std::vector<double> getCoords();
 	std::vector<DeliveryPoint> getPointsData();
-	std::vector<unsigned int> distributionIndex();
+	unsigned int distributionIndex();
 	
 	void printall();
 };

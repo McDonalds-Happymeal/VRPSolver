@@ -5,7 +5,7 @@ Problem::Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int 
 	//seed random number gen.
 	srand(time(NULL));
 
-	distribution = { 0,0,0,0 };
+	deliveries.push_back({ 0, 0,0,0 });
 
 	//index +1 as id=0 taken by distribution.
 	for(unsigned int x = 1; x<=nDeliveries;x++){
@@ -28,10 +28,6 @@ std::vector<double> Problem::getCoords()
 {
 	std::vector<double> tmp;
 
-	//add distribution coords first so coorsponds to index 0;
-	tmp.push_back(distribution.x);
-	tmp.push_back(distribution.y);
-
 	for (auto &p : deliveries)
 	{
 		tmp.push_back(p.x);
@@ -46,10 +42,9 @@ std::vector<DeliveryPoint> Problem::getPointsData()
 }
 
 //returns index of distribution
-std::vector<unsigned int> Problem::distributionIndex()
+unsigned int Problem::distributionIndex()
 {
-	std::vector<unsigned int> tmp = { distribution.id };
-	return tmp;
+	return 0;
 }
 
 void Problem::printall()
