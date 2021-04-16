@@ -16,11 +16,13 @@ void Solver::TSPSolver()
     std::vector<unsigned int> path = { 0 };
     std::vector<DeliveryPoint>::iterator shortestIt;
     for (auto it = data.begin(); it != data.end()-1; it++) {
-        shortestDistance = eDistance(*it, *(it + 1));
         shortestIt = it + 1;
-        path.push_back((*(it+1)).id);
+        shortestDistance = eDistance(*it, *shortestIt);
+        path.push_back(shortestIt->id);
+        renderData->LinesClear();
+        renderData->AddLine(path, { 1,1,1,1 }, 5.0f);
         for (auto search = it + 2; search != data.end(); search++) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             if (eDistance(*search, *it) < shortestDistance) {
                 shortestDistance = eDistance(*search, *it);
                 shortestIt = search;
@@ -32,6 +34,11 @@ void Solver::TSPSolver()
         std::iter_swap(shortestIt, it + 1);
         totalDistance += shortestDistance;
     }
+
+    totalDistance += eDistance(*data.end(),*(data.end()-1));
+    path.push_back(data.end()->id);
+    renderData->LinesClear();
+    renderData->AddLine(path, { 1,1,1,1 }, 5.0f);
 
     std::cout << "Route of length " << totalDistance << " found!" << std::endl;
 }

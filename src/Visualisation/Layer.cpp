@@ -30,6 +30,7 @@ void Layer::draw(DrawProp* i)
 	GLCall(glDrawElements(i->drawmode, i->count, GL_UNSIGNED_INT, nullptr))
 
 	vertexArray.Unbind();
+	i->indexbuffer.Unbind();
 }
 
 //creates draw properties object.
