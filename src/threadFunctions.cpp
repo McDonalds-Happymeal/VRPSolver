@@ -37,7 +37,7 @@ void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, floa
         tmpBin.clear();
         for (std::vector<DeliveryPoint>::const_iterator it = p.begin(); it != p.end(); it++) {
             std::cout << ">= min(" << min << ") && < max(" << tmpMax << ")" << std::endl;
-            if (it->qauntitiy >= min && it->qauntitiy < tmpMax) tmpBin.push_back(it->id);
+            if (it->qauntitiy >= min && it->qauntitiy <= tmpMax) tmpBin.push_back(it->id);
         }
         if (!tmpBin.empty()) render.pointsProperties(tmpBin, red, minPointSize + x);
         min += step;

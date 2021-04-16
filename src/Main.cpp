@@ -12,7 +12,7 @@
 int main(int argc, char** argv) {
 
 
-    Problem problem(50, 0, 5);
+    Problem problem(250, 0, 1);
     std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
     std::thread renderer(renderThread,renderData, std::ref(problem), 0.8f, 0, 10.0f);
 

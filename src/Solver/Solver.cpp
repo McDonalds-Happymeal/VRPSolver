@@ -22,7 +22,7 @@ void Solver::TSPSolver()
         renderData->LinesClear();
         renderData->AddLine(path, { 1,1,1,1 }, 5.0f);
         for (auto search = it + 1; search != data.end(); search++) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             if (eDistance(*search, *it) < shortestDistance) {
                 shortestDistance = eDistance(*search, *it);
                 shortestIt = search;

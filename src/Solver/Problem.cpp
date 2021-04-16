@@ -8,10 +8,12 @@ Problem::Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int 
 	deliveries.push_back({ 0, 0,0,0 });
 
 	//index +1 as id=0 taken by distribution.
+	unsigned int tmpq = 1;
 	for(unsigned int x = 1; x<=nDeliveries;x++){
 		double tmpx = static_cast<double>(rand())-(RAND_MAX/2);
 		double tmpy = static_cast<double>(rand()) - (RAND_MAX / 2);
-		unsigned int tmpq = rand() % vehCapacity;
+		if (vehCapacity > 1) tmpq = 1 + rand() % (vehCapacity - 1);//ensure delivery point have at least 1 qauntity.
+		else tmpq = 1;
 		deliveries.push_back({x, tmpx,tmpy,tmpq });
 	}
 
