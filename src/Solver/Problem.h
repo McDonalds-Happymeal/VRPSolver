@@ -21,6 +21,8 @@ public:
 	std::vector<double> getCoords();
 	std::vector<DeliveryPoint> getPointsData();
 	unsigned int distributionIndex();
+
+	unsigned int getC();
 	
 	void printall();
 };

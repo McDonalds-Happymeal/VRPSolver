@@ -9,8 +9,9 @@ Solver::~Solver()
 {
 }
 
-void Solver::TSPSolver()
+void Solver::TSPNNSolver()
 {
+    //Nearest Neighbour Traveling salesman solver.
     double totalDistance = 0;
     double shortestDistance;
     std::vector<unsigned int> path = { 0 };

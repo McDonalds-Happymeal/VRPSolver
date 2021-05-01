@@ -49,6 +49,11 @@ unsigned int Problem::distributionIndex()
 	return 0;
 }
 
+unsigned int Problem::getC()
+{
+	return vehicles[0].capacity;
+}
+
 void Problem::printall()
 {
 	std::cout << "\n\n    " << deliveries.size() <<" DELIVERY POINTS: \n" << std::endl;

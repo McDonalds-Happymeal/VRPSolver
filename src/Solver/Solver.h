@@ -8,13 +8,13 @@ class Solver
 {
 private:
 	std::shared_ptr<RenderData> renderData;
-
 	std::vector<DeliveryPoint> data;
+
 public:
 	Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
 	~Solver();
 
-	void TSPSolver();
+	void TSPNNSolver();
 
 	//calculates euclidian distance between two points.
 	double eDistance(DeliveryPoint* a, DeliveryPoint* b);
