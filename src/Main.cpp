@@ -11,10 +11,10 @@
 #include "Utils.h"
 
 //GLOBAL VARS
-std::string config = "config.cfg";
 Problem problem(1, 1);
 std::string ProblemSaveDir = "problems/";
 
+/*----------------User interface classes and handelers!----------------------------------------*/
 int _ProblemGen(int argc, std::string* argv) {
     if (argc < 3) {
         std::cout << "Command requires 2 additional parameters, type help for additional information!" << std::endl;
@@ -35,12 +35,24 @@ int _ProblemGen(int argc, std::string* argv) {
 }
 
 int _ProblemSave(int argc, std::string* argv) {
-    std::cout << "problem save called!" << std::endl;
+    if (argc < 2) {
+        std::cout << "Command requires 1 additional parameters, type help for additional information!" << std::endl;
+        return 1;
+    }
+    std::string file = ProblemSaveDir + argv[1] + ".vrp";
+    problem.saveProblem(file);
     return 1;
 }
 
 int _ProblemLoad(int argc, std::string* argv) {
-    std::cout << "problem load called!" << std::endl;
+    if (argc < 2) {
+        std::cout << "Command requires 1 additional parameters, type help for additional information!" << std::endl;
+        return 1;
+    }
+    std::string file = ProblemSaveDir + argv[1] + ".vrp";
+
+    problem.loadProblem(file);
+
     return 1;
 }
 
@@ -49,12 +61,16 @@ int _ProblemInfo(int argc, std::string* argv) {
     return 1;
 }
 
+
+
 int main(int argc, char** argv) {
 
     //creates main ui handeler object.
     CBCI::userinput ui("_>");
     ui.addCommand(_ProblemInfo, "ProblemInfo", "Will print out all availible data on currently loaded Vehicle Routing problem.");
-    ui.addCommand(_ProblemGen, "ProblemGen", "Will generate a new Vehicle routing problem requires integer parameter for number of points and capacity.\nExample: ProblemGen 10 50\nrepresents a problem with 10 points and vehicle capacity of 50.");
+    ui.addCommand(_ProblemGen, "ProblemGen", "Will generate a new Vehicle routing problem, requires integer parameter for number of points and capacity.\nExample: ProblemGen 10 50\nrepresents a problem with 10 points and vehicle capacity of 50.");
+    ui.addCommand(_ProblemSave, "ProblemSave", "Will save currently loaded problem, requires string parameter for file name.\nExample: ProblemGen problem1");
+    ui.addCommand(_ProblemLoad, "ProblemLoad", "Will load selected .vrp file, requires string parameter for file name.\nExample: ProblemGen problem1");
 
     ui.run();
     

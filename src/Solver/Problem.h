@@ -1,9 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <stdlib.h>
 #include <time.h> 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include "DeliveryPoint.h"
 #include "DeliveryVehicles.h"
@@ -17,6 +20,9 @@ private:
 public:
 	Problem(unsigned int nDeliveries, unsigned int vehCapacity);
 	~Problem();
+
+	void saveProblem(std::string file);
+	void loadProblem(std::string file);
 
 	std::vector<double> getCoords();
 	std::vector<DeliveryPoint> getPointsData();
