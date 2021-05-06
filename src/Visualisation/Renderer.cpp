@@ -1,6 +1,9 @@
 #include "Renderer.h"
 
-#ifdef _DEBUG
+//define weather to add additonal openGL debug output.
+//#define _GLDEBUG
+
+#if defined(_DEBUG) && defined(_GLDEBUG)
 //open GL error handeler.
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -21,7 +24,7 @@ MessageCallback(GLenum source,
 Renderer::Renderer(std::vector<double> points,std::shared_ptr<RenderData> _renderData, Color bgC)
 {
 	//Enables open GL error handeling if debug configurations.
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(_GLDEBUG)
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
 #endif // DEBUG
