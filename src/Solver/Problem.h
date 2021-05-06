@@ -15,7 +15,7 @@ private:
 	std::vector<DeliveryPoint> deliveries;
 	std::vector<DeliveryVehicles> vehicles;
 public:
-	Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int vehCapacity);
+	Problem(unsigned int nDeliveries, unsigned int vehCapacity);
 	~Problem();
 
 	std::vector<double> getCoords();

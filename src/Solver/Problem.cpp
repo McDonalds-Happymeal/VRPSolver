@@ -1,6 +1,6 @@
 #include "Problem.h"
 
-Problem::Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int vehCapacity)
+Problem::Problem(unsigned int nDeliveries, unsigned int vehCapacity)
 {
 	//seed random number gen.
 	srand(time(NULL));
@@ -17,9 +17,7 @@ Problem::Problem(unsigned int nDeliveries, unsigned int nVehicles, unsigned int 
 		deliveries.push_back({x, tmpx,tmpy,tmpq });
 	}
 
-	for (unsigned int x = 0; x < nVehicles; x++) {
-		vehicles.push_back({x, vehCapacity });
-	}
+	vehicles.push_back({0, vehCapacity });
 }
 
 Problem::~Problem()

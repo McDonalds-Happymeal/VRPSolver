@@ -9,10 +9,11 @@
 #include "Solver/Solver.h"
 
 
+
 int main(int argc, char** argv) {
 
 
-    Problem problem(250, 0, 1);
+    Problem problem(5, 100);
     std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
     std::thread renderer(renderThread,renderData, std::ref(problem), 0.8f, 0, 10.0f);
 

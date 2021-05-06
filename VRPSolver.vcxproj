@@ -174,7 +174,6 @@
     <ClCompile Include="src\Visualisation\VertexBufferAttributes.cpp" />
     <ClCompile Include="src\Visualisation\Window.cpp" />
     <ClCompile Include="src\threadFunctions.cpp" />
-    <ClCompile Include="tspNN.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -200,7 +199,6 @@
     <ClInclude Include="src\Visualisation\VertexBufferAttributes.h" />
     <ClInclude Include="src\Visualisation\Window.h" />
     <ClInclude Include="src\threadFunctions.h" />
-    <ClInclude Include="tspNN.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
