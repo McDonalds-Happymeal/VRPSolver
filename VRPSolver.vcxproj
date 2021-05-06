@@ -154,7 +154,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Opengl32.lib;glfw3.lib;glew32sd.lib;CBCI.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CBCI.lib;Opengl32.lib;glfw3.lib;glew32sd.lib;CBCI.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)dependencies\CBCI\lib\$(Configuration)\$(Platform)\;$(SolutionDir)dependencies\glew-2.1.0\lib\$(Configuration)\$(PlatformName)\;$(SolutionDir)dependencies\glfw-3.3.3\lib\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -189,6 +189,7 @@
     <ClInclude Include="src\Solver\DeliveryVehicles.h" />
     <ClInclude Include="src\Solver\DeliveryPoint.h" />
     <ClInclude Include="src\Solver\Problem.h" />
+    <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Visualisation\Layer.h" />
     <ClInclude Include="src\Visualisation\GLhelper.h" />
     <ClInclude Include="src\Visualisation\Shader.h" />
