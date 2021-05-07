@@ -10,15 +10,17 @@ private:
 	std::shared_ptr<RenderData> renderData;
 	std::vector<DeliveryPoint> data;
 
+	//calculates euclidian distance between two points.
+	double eDistance(DeliveryPoint* a, DeliveryPoint* b);
+	double eDistance(DeliveryPoint a, DeliveryPoint b);
+
 public:
 	Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
 	~Solver();
 
 	void TSPNNSolver();
 
-	//calculates euclidian distance between two points.
-	double eDistance(DeliveryPoint* a, DeliveryPoint* b);
-	double eDistance(DeliveryPoint a, DeliveryPoint b);
+	
 
 };
 
