@@ -60,7 +60,7 @@ Renderer::Renderer(std::vector<double> points,std::shared_ptr<RenderData> _rende
 	}
 
 	//creates main points layer with normilised values.
-	this->points = new Layer(&shader, &vertex[0], sizeof(float) * vertex.size());
+	this->points = new Layer(&shader, &vertex[0], vertex.size());
 }
 
 Renderer::~Renderer() {

@@ -10,6 +10,7 @@
 #include "CBCI.h"
 #include "Utils.h"
 
+
 //GLOBAL VARS
 Problem problem(1, 1);
 std::string ProblemSaveDir = "problems/";
