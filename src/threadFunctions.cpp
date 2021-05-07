@@ -53,4 +53,5 @@ void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, floa
     problem.printall();
 
     window.Run(&render);
+
 }

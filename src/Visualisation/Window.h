@@ -19,5 +19,7 @@ public:
 
 	//run function requires rendererpointer for draw call function.
 	void Run(Renderer* renderer);
+
+	void terminate();
 };
 

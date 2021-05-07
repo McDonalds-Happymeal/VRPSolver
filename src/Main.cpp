@@ -12,7 +12,7 @@
 
 
 //GLOBAL VARS
-Problem problem(1, 1);
+Problem problem(50, 1);
 std::string ProblemSaveDir = "problems/";
 
 /*----------------User interface classes and handelers!----------------------------------------*/
@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
 
     Solver solver(problem, renderData);
     solver.TSPNNSolver();
+    std::cout << "please close visualiser window to continue." << std::endl;
     renderer.join();
 
     return 0;

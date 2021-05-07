@@ -68,12 +68,13 @@ Window::Window(const char* title, float _scale, int _moniter) {
 
 Window::~Window()
 {
-	//std::cout << "Window object Destroyed!!!" << std::endl;
+	glfwTerminate();
 }
 
 //main run loop, will not return until termniated.
 void Window::Run(Renderer* renderer)
 {
+	bool close = false;
 	//MAIN RENDERER LOOP HERE!!!!
 	while (!glfwWindowShouldClose(window))
 	{
@@ -86,6 +87,8 @@ void Window::Run(Renderer* renderer)
 
 		/* Poll for and process events */
 		glfwPollEvents();
+
 	}
-	glfwTerminate();
 }
+
+

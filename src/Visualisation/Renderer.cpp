@@ -64,8 +64,8 @@ Renderer::Renderer(std::vector<double> points,std::shared_ptr<RenderData> _rende
 }
 
 Renderer::~Renderer() {
-	delete &shader;
-	delete &points;
+	//delete &shader;
+	//delete &points;
 }
 
 //adds points properties data via vector of indexes.
