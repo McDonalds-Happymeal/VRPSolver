@@ -4,9 +4,10 @@
 #include <algorithm>
 #include "../Visualisation/Renderer.h"
 
+
 class Solver
 {
-private:
+protected:
 	std::shared_ptr<RenderData> renderData;
 	std::vector<DeliveryPoint> data;
 
@@ -18,9 +19,18 @@ public:
 	Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
 	~Solver();
 
-	void TSPNNSolver();
+	virtual void run();
 
-	
 
 };
 
+//calculates euclidian distance between two points.
+inline double Solver::eDistance(DeliveryPoint* a, DeliveryPoint* b)
+{
+	return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2));
+}
+
+inline double Solver::eDistance(DeliveryPoint a, DeliveryPoint b)
+{
+	return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+}

@@ -6,7 +6,8 @@
 
 #include "Visualisation/renderThreadFunc.h"
 #include "Solver/Problem.h"
-#include "Solver/Solver.h"
+//#include "Solver/Solver.h"
+#include "Solver/TspNN.h"
 #include "CBCI.h"
 #include "Utils.h"
 
@@ -62,7 +63,20 @@ int _ProblemInfo(int argc, std::string* argv) {
     return 1;
 }
 
+int _tspNN(int argc, std::string* argv) {
 
+    std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
+    std::thread renderer(renderThread, renderData, std::ref(problem), 0.8f, 0, 10.0f);
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    TspNN solver(problem, renderData);
+    solver.run();
+    std::cout << "please close visualiser window to continue." << std::endl;
+    renderer.join();
+    
+    return 1;
+}
 
 int main(int argc, char** argv) {
 
@@ -72,19 +86,11 @@ int main(int argc, char** argv) {
     ui.addCommand(_ProblemGen, "ProblemGen", "Will generate a new Vehicle routing problem, requires integer parameter for number of points and capacity.\nExample: ProblemGen 10 50\nrepresents a problem with 10 points and vehicle capacity of 50.");
     ui.addCommand(_ProblemSave, "ProblemSave", "Will save currently loaded problem, requires string parameter for file name.\nExample: ProblemGen problem1");
     ui.addCommand(_ProblemLoad, "ProblemLoad", "Will load selected .vrp file, requires string parameter for file name.\nExample: ProblemGen problem1");
+    ui.addCommand(_tspNN, "TSPNN", "Traveling Sales Man Nearest Neighbour. Will execute a tspNN solver on loaded problem using distribution as the start point.");
 
     //run created userinterface
     ui.run();
-    
-    std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
-    std::thread renderer(renderThread,renderData, std::ref(problem), 0.8f, 0, 10.0f);
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-
-    Solver solver(problem, renderData);
-    solver.TSPNNSolver();
-    std::cout << "please close visualiser window to continue." << std::endl;
-    renderer.join();
 
     return 0;
 
