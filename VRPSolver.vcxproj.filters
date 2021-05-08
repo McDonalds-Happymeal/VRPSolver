@@ -54,7 +54,7 @@
     <ClCompile Include="src\Visualisation\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\threadFunctions.cpp">
+    <ClCompile Include="src\Visualisation\renderThreadFunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Solver\Solver.cpp">
@@ -107,7 +107,7 @@
     <ClInclude Include="src\Solver\DeliveryVehicles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\threadFunctions.h">
+    <ClInclude Include="src\Visualisation\renderThreadFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Solver\Solver.h">

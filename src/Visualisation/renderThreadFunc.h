@@ -1,7 +1,7 @@
 #pragma once
-#include "Visualisation/Renderer.h"
-#include "Visualisation/Window.h"
-#include "Solver/Problem.h"
+#include "Renderer.h"
+#include "Window.h"
+#include "../Solver/Problem.h"
 
 
 

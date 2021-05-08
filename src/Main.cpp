@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-#include "threadFunctions.h"
+#include "Visualisation/renderThreadFunc.h"
 #include "Solver/Problem.h"
 #include "Solver/Solver.h"
 #include "CBCI.h"

@@ -1,4 +1,4 @@
-#include "threadFunctions.h"
+#include "renderThreadFunc.h"
 
 void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, float windowScale, int moniter, float drawScale) {
     std::shared_ptr<RenderData> renderData = _renderData;
