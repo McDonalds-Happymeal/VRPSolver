@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="problems\tmp.cpp" />
     <ClCompile Include="src\Solver\Solver.cpp" />
     <ClCompile Include="src\Solver\DeliveryVehicles.cpp" />
     <ClCompile Include="src\Solver\DeliveryPoint.cpp" />

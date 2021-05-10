@@ -58,8 +58,46 @@ VRP_Dantzig_Solver::~VRP_Dantzig_Solver()
 {
 }
 
+void VRP_Dantzig_Solver::aggregationStage(std::vector<RouteAggregate> Deliveries, int stage)
+{
+	int maxCombinedCapacity = C / (N - (stage - 1));
+	std::cout << "Aggregation stage " << stage << " of " << N << " - max Combined Capacity = " << maxCombinedCapacity << std::endl;
+
+	//Distance Matrix
+	TraingularMatrix<int> Distance(Deliveries.size());
+	for (int x = 0; x < Deliveries.size() - 1; x++) {
+		for (int y = Deliveries.size() - 1; y > x; y--) {
+			//Need VRP here.
+		}
+	}
+
+	//admisable matrix
+	TraingularMatrix<int> A(Deliveries.size());
+
+	for (int x = 0; x < Deliveries.size() - 1; x++) {
+		for (int y = Deliveries.size() - 1; y > x; y--) {
+			if (maxCombinedCapacity > (Deliveries[x].qauntitiy + Deliveries[y].qauntitiy)) A(x, y) = 1;
+		}
+	}
+	A.print();
+
+	//piValues for each delivery point used to calculate deltas.
+	std::vector<double> piValues;
+	piValues.push_back(0);//sets distribution point arbitrarily to 0.
+
+	for (int x = 1; x < data.size(); x++) {
+		for (int y = 0; y < data.size(); y++) {
+			if (x != y && X(x, y) == 1) {
+				piValues.push_back(-(piValues[y] - D(x, y)));
+				break;
+			}
+		}
+	}
+}
+
 void VRP_Dantzig_Solver::run()
 {
+
 
 	aggregationStage(1);
 
@@ -132,7 +170,21 @@ void VRP_Dantzig_Solver::aggregationStage(int stage)
 		deltas.pop_back();
 		updateVis();
 	}
+
+
+	std::vector<RouteAggregate> Aggregates;
+	for (int x = 1; x < data.size(); x++) {
+		for (int y = data.size() - 1; y > x; y--) {
+			if (X(x, y)) {
+				if(x==0 || y == 0) Aggregates.push_back({ x,y, 0,data[x].qauntitiy+data[y].qauntitiy});
+				else Aggregates.push_back({ x,y, D(x,y) ,data[x].qauntitiy + data[y].qauntitiy });
+			}
+		}
+	}
+
+	aggregationStage(Aggregates ,stage--);
 }
+
 
 void VRP_Dantzig_Solver::RapidCorrection(int x, int y)
 {
