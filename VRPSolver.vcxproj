@@ -163,6 +163,7 @@
     <ClCompile Include="src\Solver\DeliveryVehicles.cpp" />
     <ClCompile Include="src\Solver\DeliveryPoint.cpp" />
     <ClCompile Include="src\Solver\Problem.cpp" />
+    <ClCompile Include="src\Solver\VRP_Dantzig_Solver.cpp" />
     <ClCompile Include="src\Visualisation\Layer.cpp" />
     <ClCompile Include="src\Visualisation\GLhelper.cpp" />
     <ClCompile Include="src\Visualisation\Renderer.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Solver\DeliveryVehicles.h" />
     <ClInclude Include="src\Solver\DeliveryPoint.h" />
     <ClInclude Include="src\Solver\Problem.h" />
+    <ClInclude Include="src\Solver\VRP_Dantzig_Solver.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Visualisation\Layer.h" />
     <ClInclude Include="src\Visualisation\GLhelper.h" />

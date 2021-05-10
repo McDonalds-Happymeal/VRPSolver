@@ -3,17 +3,18 @@
 #include <cmath>
 #include <algorithm>
 #include "../Visualisation/Renderer.h"
-
+#include "TraingularMatrix.h"
 
 class Solver
 {
 protected:
 	std::shared_ptr<RenderData> renderData;
 	std::vector<DeliveryPoint> data;
+	const Problem& problem;
 
 	//calculates euclidian distance between two points.
 	double eDistance(DeliveryPoint* a, DeliveryPoint* b);
-	double eDistance(DeliveryPoint a, DeliveryPoint b);
+	double eDistance(DeliveryPoint& a, DeliveryPoint& b);
 
 public:
 	Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
@@ -30,7 +31,7 @@ inline double Solver::eDistance(DeliveryPoint* a, DeliveryPoint* b)
 	return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2));
 }
 
-inline double Solver::eDistance(DeliveryPoint a, DeliveryPoint b)
+inline double Solver::eDistance(DeliveryPoint& a, DeliveryPoint& b)
 {
 	return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }

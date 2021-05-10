@@ -8,6 +8,7 @@
 #include "Solver/Problem.h"
 //#include "Solver/Solver.h"
 #include "Solver/TspNN.h"
+#include "Solver/VRP_Dantzig_Solver.h"
 #include "CBCI.h"
 #include "Utils.h"
 
@@ -78,6 +79,27 @@ int _tspNN(int argc, std::string* argv) {
     return 1;
 }
 
+int _vrpDR(int argc, std::string* argv) {
+
+    std::shared_ptr<RenderData> renderData = std::make_shared<RenderData>();
+    std::thread renderer(renderThread, renderData, std::ref(problem), 0.8f, 0, 10.0f);
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    VRP_Dantzig_Solver solver(problem, renderData);
+    solver.run();
+    std::cout << "please close visualiser window to continue." << std::endl;
+    renderer.join();
+
+    return 1;
+}
+
+
+int func(int x, int y) {
+    if (x > y) return (x * (x - 1) / 2 + y);
+    else return (y * (y - 1) / 2 + x);
+}
+
 int main(int argc, char** argv) {
 
     //creates main ui handler object with cursor type "_>"
@@ -87,9 +109,21 @@ int main(int argc, char** argv) {
     ui.addCommand(_ProblemSave, "ProblemSave", "Will save currently loaded problem, requires string parameter for file name.\nExample: ProblemGen problem1");
     ui.addCommand(_ProblemLoad, "ProblemLoad", "Will load selected .vrp file, requires string parameter for file name.\nExample: ProblemGen problem1");
     ui.addCommand(_tspNN, "TSPNN", "Traveling Sales Man Nearest Neighbour. Will execute a tspNN solver on loaded problem using distribution as the start point.");
+    ui.addCommand(_vrpDR, "VRPDantzig", "VRP Solver using the Dantzig and Ramser solver algorithm. Will execute solver on loaded problem.");
 
     //run created userinterface
-    ui.run();
+    //ui.run();
+
+    std::string tmp = "bob";
+    
+    problem.loadProblem(ProblemSaveDir + "test" + ".vrp");
+    _vrpDR(0, &tmp);
+    /*
+    for (int x = 0; x <= 10; x++) {
+        for (int y = 0; y <= x; y++) {
+            std::cout << "x = " << x << ", y = " << y << " , result = " << func(x, y) << std::endl;
+        }
+    }*/
 
 
     return 0;

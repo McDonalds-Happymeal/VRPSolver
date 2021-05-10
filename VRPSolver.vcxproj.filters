@@ -63,6 +63,9 @@
     <ClCompile Include="src\Solver\TspNN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Solver\VRP_Dantzig_Solver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Solver\TspNN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Solver\VRP_Dantzig_Solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

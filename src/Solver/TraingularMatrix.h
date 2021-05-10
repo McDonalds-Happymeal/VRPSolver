@@ -1,24 +1,30 @@
 #pragma once
+
+#include <iomanip>
 template <typename T>
 class TraingularMatrix
 {
 private:
 	std::vector<T> matrix;
 	const unsigned int m_size;
-	const unsigned int m_depth;
+	
 public:
-	TraingularMatrix(unsigned int depth);
+	const unsigned int m_depth;
+
+
+	TraingularMatrix(const unsigned& depth);
 	~TraingularMatrix();
 
-	T& operator()(const unsigned&, const unsigned&);
-	void print();
+	T& operator()(const unsigned& x, const unsigned& y);
+	void print(int width = 8);
+
 };
 
-//size calcualted in iniitliaser list.
+//size calculated in iniitliaser list.
 template<typename T>
-inline TraingularMatrix<T>::TraingularMatrix(unsigned int depth) : m_depth(depth), m_size(depth* (depth - 1) / 2 + depth)
+inline TraingularMatrix<T>::TraingularMatrix(const unsigned& depth) : m_depth(depth), m_size(depth* (depth - 1) / 2)
 {
-	matrix.resize(M_size);
+	matrix.resize(m_size);
 }
 
 template<typename T>
@@ -26,9 +32,28 @@ inline TraingularMatrix<T>::~TraingularMatrix()
 {
 }
 
+
 template<typename T>
-inline T& TraingularMatrix<T>::operator[](size_type x, size_type y)
+inline T& TraingularMatrix<T>::operator()(const unsigned& x, const unsigned& y)
 {
-	if (x < y) return matrix[x * depth + y];
-	else return matrix[y * depth + x];
+	if (x > y) return matrix[(x * (x - 1) / 2 + y)];
+	else return matrix[(y * (y - 1) / 2 + x)];
 }
+
+template<typename T>
+inline void TraingularMatrix<T>::print(int width)
+{
+	int i = 0;
+	int row = 0;
+	for (T x : matrix) {
+		std::cout << std::setw(width) << x << ",";
+		i++;
+		if (i > row) {
+			i = 0;
+			row++;
+			std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+}
+

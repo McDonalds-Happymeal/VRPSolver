@@ -148,7 +148,6 @@ void RenderData::tryAddLineClear(std::vector<unsigned int> data, Color color, fl
 		linesPropertiesList.push({ data,color,scale });
 		mutex.unlock();
 	}
-	
 }
 
 //adds blank line properties tmeplate that will be interpreted as a local line properties clear when reahced by draw.

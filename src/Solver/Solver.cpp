@@ -1,8 +1,8 @@
 #include "Solver.h"
 
-Solver::Solver(Problem problem, std::shared_ptr<RenderData> _renderData) : renderData(_renderData)
+Solver::Solver(Problem _problem, std::shared_ptr<RenderData> _renderData) : renderData(_renderData) , problem(_problem)
 {
-    data = problem.getPointsData();
+    data = _problem.getPointsData();
 }
 
 Solver::~Solver()
