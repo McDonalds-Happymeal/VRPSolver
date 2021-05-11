@@ -95,10 +95,6 @@ int _vrpDR(int argc, std::string* argv) {
 }
 
 
-int func(int x, int y) {
-    if (x > y) return (x * (x - 1) / 2 + y);
-    else return (y * (y - 1) / 2 + x);
-}
 
 int main(int argc, char** argv) {
 

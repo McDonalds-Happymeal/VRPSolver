@@ -9,10 +9,8 @@ struct delta {
 };
 
 struct RouteAggregate {
-    int x;
-    int y;
-    double intLength;
-    int qauntitiy;
+    std::vector<int> containedPoints;
+    unsigned int qauntitiy;
 };
 
 
@@ -28,12 +26,14 @@ private:
     int N;
 
     void updateVis();
+    void updateVis2(TraingularMatrix<int>& stageX, std::vector<RouteAggregate>& Deliveries);
 
     void aggregationStage(int N);
 
     void aggregationStage(std::vector<RouteAggregate> Deliveries, int stage);
 
     void RapidCorrection(int x,int y);
+    void RapidCorrection(TraingularMatrix<int>& _X, int x, int y);
 
     //capacity.
     const unsigned int C;
