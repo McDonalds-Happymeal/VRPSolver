@@ -9,7 +9,7 @@ struct delta {
 };
 
 struct RouteAggregate {
-    std::vector<int> containedPoints;
+    std::vector<unsigned int> containedPoints;
     unsigned int qauntitiy;
 };
 
@@ -18,22 +18,19 @@ class VRP_Dantzig_Solver :
     public Solver
 {
 private:
-    //Connection matrix.
-    TraingularMatrix<int> X;
-    //distance matrix.
+    //suppresses console output for larger problem to increase preformance.
+    bool showFullOutput = true;
+
+    //global distance matrix.
     TraingularMatrix<double> D;
-
     int N;
+    void updateVis2(TraingularMatrix<int>& X, std::vector<RouteAggregate>& A);
+    void updateVis2(std::vector<RouteAggregate>& A);
 
-    void updateVis();
-    void updateVis2(TraingularMatrix<int>& stageX, std::vector<RouteAggregate>& Deliveries);
 
-    void aggregationStage(int N);
-
-    void aggregationStage(std::vector<RouteAggregate> Deliveries, int stage);
-
-    void RapidCorrection(int x,int y);
     void RapidCorrection(TraingularMatrix<int>& _X, int x, int y);
+    void VRPStage(int stage, std::vector<RouteAggregate>& A);
+    void finalStage(std::vector<RouteAggregate>& A);
 
     //capacity.
     const unsigned int C;

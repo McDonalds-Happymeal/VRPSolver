@@ -17,8 +17,8 @@ protected:
 	double eDistance(DeliveryPoint& a, DeliveryPoint& b);
 	double eDistance(const int& a, const int& b);
 
-	double routeDistance(std::vector<int>& points);
-	double tspNI(std::vector<int>& points);
+	double routeDistance(std::vector<unsigned int>& points);
+	double tspNI(std::vector<unsigned int>& points);
 
 public:
 	Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
@@ -45,7 +45,7 @@ inline double Solver::eDistance(const int& a, const int& b)
 	return sqrt(pow(data[a].x - data[b].x, 2) + pow(data[a].y - data[b].y, 2));
 }
 
-inline double Solver::routeDistance(std::vector<int>& points)
+inline double Solver::routeDistance(std::vector<unsigned int>& points)
 {
 	double totalDistance = eDistance(*points.begin(), *(points.end()-1));
 	for (auto p = points.begin(); p != points.end()-1; p++) {
@@ -55,10 +55,10 @@ inline double Solver::routeDistance(std::vector<int>& points)
 	return totalDistance;
 }
 
-inline double Solver::tspNI(std::vector<int>& points)
+inline double Solver::tspNI(std::vector<unsigned int>& points)
 {
 	if (points.size() <= 1) return 0.0;
-	std::vector<int> route;
+	std::vector<unsigned int> route;
 
 	//choose two staring nodes.
 	route.push_back(*(points.end() - 1));
@@ -85,7 +85,7 @@ inline double Solver::tspNI(std::vector<int>& points)
 		int bestPos = 0;
 		double bestRoute = routeDistance(route);
 		int tmp;
-		for (int i = 1; i < route.size()-1; i++) {
+		for (int i = 1; i < route.size(); i++) {
 			tmp = route[i];
 			route[i] = route[i-1];
 			route[i-1] = tmp;

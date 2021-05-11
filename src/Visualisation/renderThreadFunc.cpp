@@ -36,7 +36,6 @@ void renderThread(std::shared_ptr<RenderData>_renderData, Problem& problem, floa
     for (int x = 0; x <= bins; x++) {
         tmpBin.clear();
         for (std::vector<DeliveryPoint>::const_iterator it = p.begin(); it != p.end(); it++) {
-            std::cout << ">= min(" << min << ") && < max(" << tmpMax << ")" << std::endl;
             if (it->qauntitiy >= min && it->qauntitiy <= tmpMax) tmpBin.push_back(it->id);
         }
         if (!tmpBin.empty()) render.pointsProperties(tmpBin, red, minPointSize + x);

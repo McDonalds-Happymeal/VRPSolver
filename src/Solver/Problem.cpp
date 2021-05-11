@@ -12,7 +12,7 @@ Problem::Problem(unsigned int nDeliveries, unsigned int vehCapacity)
 	for (unsigned int x = 1; x <= nDeliveries; x++) {
 		double tmpx = static_cast<double>(rand()) - (RAND_MAX / 2);
 		double tmpy = static_cast<double>(rand()) - (RAND_MAX / 2);
-		if (vehCapacity > 1) tmpq = 1 + rand() % (vehCapacity - 1);//ensure delivery point have at least 1 qauntity.
+		if (vehCapacity > 1) tmpq = (1 + rand() % (vehCapacity - 1))/2;//ensure delivery point have at least 1 qauntity.
 		else tmpq = 1;
 		deliveries.push_back({ x, tmpx,tmpy,tmpq });
 	}

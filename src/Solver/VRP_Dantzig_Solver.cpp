@@ -1,8 +1,13 @@
 #include "VRP_Dantzig_Solver.h"
 
 VRP_Dantzig_Solver::VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderData> _renderData)
-	: Solver{ problem,_renderData } , C(problem.getC()), D(TraingularMatrix<double>(data.size())), X(TraingularMatrix<int>(data.size()))
+	: Solver{ problem,_renderData } ,
+	C(problem.getC()) , 
+	D(TraingularMatrix<double>(data.size()))
 {
+
+	if (data.size() > 25) showFullOutput = false;
+
 	std::cout << "calculating number of stages of aggregation." << std::endl;
 
 	//temporary vector for sorting qauntities
@@ -30,71 +35,88 @@ VRP_Dantzig_Solver::VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderDa
 	N = ceil(log(t));
 
 	std::cout << "Maximum deliveries per route: t = " << t << std::endl;
-	std::cout << "stages of aggreagtion: N = " << N << std::endl;
-
-
-	//populate Distance matrix
-	for (int x = 0; x < data.size(); x++) {
-		for (int y = data.size()-1; y > x; y--) {
-			D(x, y) = eDistance(data[x], data[y]);
-		}
-	}
-	std::cout << "DISTANCE MATRIX" << std::endl;
-	D.print();
-
-	//Create Routes matrix set 0,i to 1 so all points start connected to the distribution point.
-	for (int x = 0; x < data.size(); x++) {
-		X(x, 0) = 1;
-	}
-
-	std::cout << "ROUTE MATRIX" << std::endl;
-	X.print();
-
-	updateVis();
+	std::cout << "Stages of aggreagtion: N = " << N << std::endl;
 }
 
 VRP_Dantzig_Solver::~VRP_Dantzig_Solver()
 {
 }
 
-void VRP_Dantzig_Solver::aggregationStage(std::vector<RouteAggregate> Deliveries, int stage)
+void VRP_Dantzig_Solver::run()
 {
-	int maxCombinedCapacity = C / (N - (stage - 1));
-	std::cout << "Aggregation stage " << stage << " of " << N << " - max Combined Capacity = " << maxCombinedCapacity << std::endl;
+	//start on stage 1.
+	int stage = 1;
 
-	//Distance Matrix
-	TraingularMatrix<double> Distance(Deliveries.size());
-	TraingularMatrix<int> Admisable(Deliveries.size());
-	for (int x = 0; x < Deliveries.size() - 1; x++) {
-		for (int y = Deliveries.size() - 1; y > x; y--) {
-			if ((Deliveries[x].qauntitiy + Deliveries[y].qauntitiy) <= maxCombinedCapacity) {
-				std::vector<int> tmp = Deliveries[x].containedPoints;
-				tmp.insert(tmp.end(), Deliveries[y].containedPoints.begin(), Deliveries[y].containedPoints.end());
-				tmp.push_back(0);
+	//populate global Distance matrix
+	for (int x = 0; x < data.size(); x++) {
+		for (int y = data.size() - 1; y > x; y--) {
+			D(x, y) = eDistance(data[x], data[y]);
+		}
+	}
+	if (showFullOutput) {
+		std::cout << "DISTANCE MATRIX" << std::endl;
+		D.print();
+	}
+
+	std::vector<RouteAggregate> routeAggregates;
+	for (auto i : data) {
+		routeAggregates.push_back({ {i.id}, i.qauntitiy});
+	}
+
+	VRPStage(stage, routeAggregates);	
+}
+
+void VRP_Dantzig_Solver::VRPStage(int stage, std::vector<RouteAggregate>& A)
+{
+	//calulate stage maximum capacity
+	int maxCombinedCapacity = C / (N - (stage - 1));
+	std::cout << "Aggregation stage " << stage << " of " << N << " - Max Combined Capacity = " << maxCombinedCapacity << std::endl;
+
+	//Create Distance Matrix.
+	TraingularMatrix<double> Distance(A.size());
+	for (int x = 0; x < Distance.m_depth; x++) {
+		for (int y = Distance.m_depth - 1; y > x; y--) {
+			//will only calulate if admissable to improve preformance.
+			if ((A[x].qauntitiy + A[y].qauntitiy) <= maxCombinedCapacity) {
+				//temporary vector combines points from x and y.
+				std::vector<unsigned int> tmp = A[x].containedPoints;
+				tmp.insert(tmp.end(), A[y].containedPoints.begin(), A[y].containedPoints.end());
+				//calculate shortest distance to meet points using tsp algorithm.
 				Distance(x, y) = tspNI(tmp);
-				Admisable(x, y) = 1;
 			}
 		}
 	}
+	if (showFullOutput) {
+		std::cout << "STAGE " << stage << " DISTANCE MATRIX" << std::endl;
+		Distance.print();
+		std::cout << std::endl;
+	}
 
-	Distance.print();
-	Admisable.print();
-
-	TraingularMatrix<int> stageX(Deliveries.size());
+	TraingularMatrix<int> X(A.size());
 	//Create Routes matrix set 0,i to 1 so all points start connected to the distribution point.
-	for (int x = 0; x < Deliveries.size(); x++) {
-		stageX(x, 0) = 1;
+	for (int x = 0; x < A.size(); x++) {
+		X(x, 0) = 1;
+	}
+
+	//update visualiser with created X matrix.
+	updateVis2(X, A);
+
+	if (showFullOutput) {
+		std::cout << "STAGE " << stage << " CONNECTION MATRIX" << std::endl;
+		X.print();
+		std::cout << std::endl;
 	}
 
 	//piValues for each aggregate used to calculate deltas.
 	std::vector<double> piValues;
 	piValues.push_back(0);//sets distribution point arbitrarily to 0.
 
-	for (int x = 1; x < Deliveries.size(); x++) {
-		for (int y = 0; y < Deliveries.size(); y++) {
-			if (x != y && stageX(x, y) == 1) {
-				std::vector<int> tmp = Deliveries[x].containedPoints;
-				tmp.insert(tmp.end(), Deliveries[y].containedPoints.begin(), Deliveries[y].containedPoints.end());
+	//Calculate piValue for each point.
+	for (int x = 1; x < A.size(); x++) {
+		for (int y = 0; y < A.size(); y++) {
+			if (x != y && X(x, y) == 1) {
+				std::vector<unsigned int> tmp = A[x].containedPoints;
+				tmp.insert(tmp.end(), A[y].containedPoints.begin(), A[y].containedPoints.end());
 				tmp.push_back(0);
 				piValues.push_back(-(piValues[y] - tspNI(tmp)));
 				break;
@@ -102,179 +124,123 @@ void VRP_Dantzig_Solver::aggregationStage(std::vector<RouteAggregate> Deliveries
 		}
 	}
 
-	for (auto i : piValues) {
-		std::cout << "piValue =" << i << std::endl;
-	}
-
 	std::vector<delta> deltas;
 	//calculate deltas for admiisable values of X
-	for (int x = 1; x < Deliveries.size(); x++) {
-		for (int y = Deliveries.size() - 1; y > x; y--) {
-			if (Admisable(x, y)) deltas.push_back({ x,y, (piValues[x] + piValues[y]) - Distance(x, y) });
+	for (int x = 1; x < A.size(); x++) {
+		for (int y = A.size() - 1; y > x; y--) {
+			//calcualtes deltas for Distances that are calculated.
+			if (Distance(x, y)>0) deltas.push_back({ x,y, (piValues[x] + piValues[y]) - Distance(x, y) });
 		}
 	}
 
+	//sorts deltas form highest to lowest.
 	std::sort(std::begin(deltas), std::end(deltas), [](const delta& a, const delta& b) {
 		return (a.value < b.value);
 		});
 
-	std::cout << "DELTAS" << std::endl;
-	for (auto i : deltas) {
-		std::cout << "(" << i.x << "," << i.y << ") delta =" << i.value << std::endl;
+	if (showFullOutput) {
+		std::cout << "STAGE " << stage << " DELTAS" << std::endl;
+		for (auto i : deltas) {
+			std::cout << "(" << i.x << "," << i.y << ") delta =" << i.value << std::endl;
+		}
 	}
 
+	//apply corrections using deltas
 	while (deltas.size() != 0) {
-		RapidCorrection(stageX,(deltas.end() - 1)->x, (deltas.end() - 1)->y);
+		//exit if correction would not improve solution.
+		if ((deltas.end() - 1)->value < 0) break;
+		RapidCorrection(X, (deltas.end() - 1)->x, (deltas.end() - 1)->y);
 		deltas.pop_back();
-		stageX.print();
-	}
-	stageX.print();
-
-	renderData->LinesClear();
-	//find routes from stage
-	std::vector<RouteAggregate> nextAggregates;
-	for (int x = 0; x < Deliveries.size(); x++) {
-		for (int y = Deliveries.size() - 1; y > x; y--) {
-			if (stageX(x, y)) {
-				std::vector<int> tmp = Deliveries[x].containedPoints;
-				tmp.insert(tmp.end(), Deliveries[y].containedPoints.begin(), Deliveries[y].containedPoints.end());
-				nextAggregates.push_back({ tmp,Deliveries[x].qauntitiy + Deliveries[y].qauntitiy });
-				std::vector<unsigned int> drawData;
-				for (auto i : tmp) {
-					drawData.push_back(static_cast<unsigned int>(i));
-				}
-				renderData->AddLine(drawData, { 1.0f,1.0f,1.0f,1.0f }, 2);
-			}
-		}
+		updateVis2(X, A);
 	}
 
-	if (stage == N) {
-		renderData->LinesClear();
-
-		double totalDistance = 0;
-		for (auto routes : nextAggregates) {
-			routes.containedPoints.push_back(0);
-			double tmpDistance = tspNI(routes.containedPoints);
-			totalDistance += tmpDistance;
-			std::vector<unsigned int> drawData;
-			for (auto i : routes.containedPoints) {
-				drawData.push_back(static_cast<unsigned int>(i));
-			}
-			drawData.push_back(drawData[0]);
-			renderData->AddLine(drawData, { 1.0f,1.0f,1.0f,1.0f }, 2);
-			std::cout << "ROUTE DISTANCE : " << tmpDistance << std::endl;
-			for (auto i : routes.containedPoints) {
-				std::cout << i << ", " << std::endl;
-			}
-			std::cout << std::endl;
-		}
+	
+	if (showFullOutput) {
+		std::cout << "UPDATED STAGE " << stage << " CONNECTION MATRIX" << std::endl;
+		X.print();
+		std::cout << std::endl;
 	}
 
-}
-
-void VRP_Dantzig_Solver::run()
-{
-
-
-	aggregationStage(1);
-
-	X.print();
-}
-
-void VRP_Dantzig_Solver::updateVis()
-{
-	renderData->LinesClear();
-	std::vector<unsigned int> linesToDraw;
-	for (int x = 0; x < data.size(); x++) {
-		for (int y = data.size()-1; y > x; y--) {
-			if (X(x, y) == 1) {
-				linesToDraw.clear();
-				linesToDraw.push_back(x);
-				linesToDraw.push_back(y);
-				renderData->AddLine(linesToDraw, { 1.0f,1.0f,1.0f,1.0f }, 2);
-			}
-		}
+	std::vector<RouteAggregate> newAggregates;
+	//collect points that are still swinned with Distribution.
+	for (int y = X.m_depth - 1; y > 0; y--) {
+		if (X(0,y)) newAggregates.push_back({ A[y].containedPoints, A[y].qauntitiy });
 	}
-}
-
-
-
-void VRP_Dantzig_Solver::aggregationStage(int stage)
-{
-	int maxCombinedCapacity = C / (N - (stage - 1));
-	std::cout << "Aggregation stage " << stage << " of " << N << " - max Combined Capacity = " << maxCombinedCapacity << std::endl;
-
-	//admisable matrix
-	TraingularMatrix<int> A(data.size());
-
-	for (int x = 0; x < data.size() - 1; x++) {
-		for (int y = data.size() - 1; y > x; y--) {
-			if (maxCombinedCapacity > (data[x].qauntitiy + data[y].qauntitiy)) A(x, y) = 1;
-		}
-	}
-	A.print();
-
-	//piValues for each delivery point used to calculate deltas.
-	std::vector<double> piValues;
-	piValues.push_back(0);//sets distribution point arbitrarily to 0.
-
-	for (int x = 1; x < data.size(); x++) {
-		for (int y = 0; y < data.size(); y++) {
-			if (x != y && X(x, y) == 1) {
-				piValues.push_back(-(piValues[y] - D(x, y)));
-				break;
-			}
-		}
-	}
-
-	std::vector<delta> deltas;
-	//calculate deltas for admiisable values of X
-	for (int x = 1; x < data.size(); x++) {
-		for (int y = data.size() - 1; y > x; y--) {
-			if (A(x, y)) deltas.push_back({ x,y, piValues[x] + piValues[y] - D(x, y) });
-		}
-	}
-
-	std::sort(std::begin(deltas), std::end(deltas), [](const delta& a, const delta& b) {
-		return (a.value < b.value);
-		});
-
-	std::cout << "DELTAS" << std::endl;
-	for (auto i : deltas) {
-		std::cout << "(" << i.x << "," << i.y << ") delta =" << i.value << std::endl;
-	}
-
-	while (deltas.size() != 0) {
-		RapidCorrection((deltas.end() - 1)->x, (deltas.end() - 1)->y);
-		deltas.pop_back();
-		updateVis();
-	}
-
-
-	std::vector<RouteAggregate> Aggregates;
-	Aggregates.push_back({ { 0 },0 });
-	for (int x = 0; x < data.size(); x++) {
-		for (int y = data.size() - 1; y > x; y--) {
+	for (int x = 1; x < X.m_depth; x++) {
+		for (int y = X.m_depth - 1; y > x; y--) {
 			if (X(x, y)) {
-				if(x==0) Aggregates.push_back({ {y},data[x].qauntitiy + data[y].qauntitiy });
-				else if (y==0) Aggregates.push_back({ {x},data[x].qauntitiy + data[y].qauntitiy });
-				else Aggregates.push_back({ {x,y},data[x].qauntitiy + data[y].qauntitiy });
+				std::vector<unsigned int> tmp = A[x].containedPoints;
+				tmp.insert(tmp.end(), A[y].containedPoints.begin(), A[y].containedPoints.end());
+				newAggregates.push_back({ tmp,A[x].qauntitiy + A[y].qauntitiy });
 			}
 		}
 	}
 
-	aggregationStage(Aggregates ,stage+1);
-}
+	//if another stage of aggregation required call recursive, or complete finalisation.
+	if (stage != N) {
+		//required to stop points connecting with themselves.
+		newAggregates.insert(newAggregates.begin(), { {0},0 });
+		//launch next stage of VRP.
+		VRPStage(stage + 1, newAggregates);
+	}
+	else {
+		for (int i = 0; i < newAggregates.size(); i++) {
+			//add distribution point and find optimal route from points using tsp.
+			newAggregates[i].containedPoints.push_back(0);
+			tspNI(newAggregates[i].containedPoints);
 
-
-void VRP_Dantzig_Solver::RapidCorrection(int x, int y)
-{
-	if (X(0, x) == 1 && X(0, y) == 1) {
-		X(0, x) = 0;
-		X(0, y) = 0;
-		X(x, y) = 1;
+			//move distribution to front of all routes, for presentation.
+			while (newAggregates[i].containedPoints[0] != 0) {
+				newAggregates[i].containedPoints.insert(newAggregates[i].containedPoints.begin(), *(newAggregates[i].containedPoints.end() - 1));
+				newAggregates[i].containedPoints.pop_back();
+			}
+			newAggregates[i].containedPoints.push_back(0);
+		}
+		updateVis2(newAggregates);
+		finalStage(newAggregates);
 	}
 }
+
+void VRP_Dantzig_Solver::finalStage(std::vector<RouteAggregate>& A)
+{
+	std::cout << "VRP COMPLETE!" << std::endl;
+	std::cout << "solution contains " << A.size() << " routes." << std::endl;
+	double totalCost = 0;
+	int routeID = 0;
+	for (auto i : A) {
+		std::cout << "ROUTE " << routeID++ << " : ";
+		for (auto z : i.containedPoints) {
+			std::cout << z << ", ";
+		}
+		std::cout << std::endl;
+		totalCost += routeDistance(i.containedPoints);
+	}
+	std::cout << std::endl;
+	std::cout << "TOTAL COST OF ROUTES :" << totalCost << std::endl;
+}
+
+void VRP_Dantzig_Solver::updateVis2(TraingularMatrix<int>& X, std::vector<RouteAggregate>& A)
+{
+	renderData->LinesClear();
+	for (int x = 0; x < X.m_depth; x++) {
+		for (int y = X.m_depth - 1; y > x; y--) {
+			if (X(x, y) == 1) {
+				std::vector<unsigned int> tmp = A[x].containedPoints;
+				tmp.insert(tmp.end(), A[y].containedPoints.begin(), A[y].containedPoints.end());
+				renderData->AddLine(tmp, { 1.f,1.f,1.f,1.f }, 2);
+			}
+		}
+	}
+}
+
+void VRP_Dantzig_Solver::updateVis2(std::vector<RouteAggregate>& A)
+{
+	renderData->LinesClear();
+	for (auto i : A) {
+		renderData->AddLine(i.containedPoints, { 1.f,1.f,1.f,1.f }, 2);
+	}
+}
+
 
 void VRP_Dantzig_Solver::RapidCorrection(TraingularMatrix<int>& _X, int x, int y)
 {

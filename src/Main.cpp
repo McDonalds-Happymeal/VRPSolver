@@ -14,7 +14,7 @@
 
 
 //GLOBAL VARS
-Problem problem(50, 1);
+Problem problem(250, 50);
 std::string ProblemSaveDir = "problems/";
 
 /*----------------User interface classes and handelers!----------------------------------------*/
@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
     ui.addCommand(_vrpDR, "VRPDantzig", "VRP Solver using the Dantzig and Ramser solver algorithm. Will execute solver on loaded problem.");
 
     //run created userinterface
-    //ui.run();
+    ui.run();
 
     std::string tmp = "bob";
     
