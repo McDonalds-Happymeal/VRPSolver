@@ -6,9 +6,9 @@ class TraingularMatrix
 {
 private:
 	std::vector<T> matrix;
-	const unsigned int m_size;
 	
 public:
+	const unsigned int m_size;
 	const unsigned int m_depth;
 
 

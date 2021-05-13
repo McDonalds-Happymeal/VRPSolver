@@ -20,6 +20,7 @@ class VRP_Dantzig_Solver :
 private:
     //suppresses console output for larger problem to increase preformance.
     bool showFullOutput = true;
+    int renderer_wait = 0;
 
     //global distance matrix.
     TraingularMatrix<double> D;
@@ -35,7 +36,7 @@ private:
     //capacity.
     const unsigned int C;
 public:
-    VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderData> _renderData);
+    VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderData> _renderData, int _wait = 0);
     ~VRP_Dantzig_Solver();
 
     void run();

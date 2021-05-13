@@ -1,11 +1,12 @@
 #include "VRP_Dantzig_Solver.h"
 
-VRP_Dantzig_Solver::VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderData> _renderData)
+VRP_Dantzig_Solver::VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderData> _renderData, int _wait)
 	: Solver{ problem,_renderData } ,
 	C(problem.getC()) , 
 	D(TraingularMatrix<double>(data.size()))
 {
 
+	renderer_wait = _wait;
 	if (data.size() > 25) showFullOutput = false;
 
 	std::cout << "calculating number of stages of aggregation." << std::endl;
@@ -28,9 +29,10 @@ VRP_Dantzig_Solver::VRP_Dantzig_Solver(Problem problem, std::shared_ptr<RenderDa
 		//terminate if end of vector reached.
 		if (&sortedQauntities[t] == &sortedQauntities.back()) break;
 	}
-
 	//minus distribution point and loop additon.
 	t -= 2;
+
+	if (t < 2) t = 2;
 
 	N = ceil(log(t));
 
@@ -231,6 +233,7 @@ void VRP_Dantzig_Solver::updateVis2(TraingularMatrix<int>& X, std::vector<RouteA
 			}
 		}
 	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(renderer_wait));
 }
 
 void VRP_Dantzig_Solver::updateVis2(std::vector<RouteAggregate>& A)

@@ -10,8 +10,9 @@ Problem::Problem(unsigned int nDeliveries, unsigned int vehCapacity)
 	//index +1 as id=0 taken by distribution.
 	unsigned int tmpq = 1;
 	for (unsigned int x = 1; x <= nDeliveries; x++) {
-		double tmpx = static_cast<double>(rand()) - (RAND_MAX / 2);
-		double tmpy = static_cast<double>(rand()) - (RAND_MAX / 2);
+		double tmpx = static_cast<double>(rand()/16) - (RAND_MAX / 32);
+		double tmpy = static_cast<double>(rand()/16) - (RAND_MAX / 32);
+
 		if (vehCapacity > 1) tmpq = (1 + rand() % (vehCapacity - 1))/2;//ensure delivery point have at least 1 qauntity.
 		else tmpq = 1;
 		deliveries.push_back({ x, tmpx,tmpy,tmpq });
@@ -122,7 +123,7 @@ void Problem::printall()
 	unsigned long int tmpq = 0;//adds total qauntitiy to be delivered
 	unsigned int tmpc = 0;//adds total vehicle capacity.
 	for (auto& p : deliveries) {
-		std::cout << p.id << " : (" << p.x << " , " << p.y << ") qauntity = " << p.qauntitiy << std::endl;
+		std::cout << p.id << " : (" << p.x << " , " << p.y << ") quantity = " << p.qauntitiy << std::endl;
 		tmpq += p.qauntitiy;
 	}
 
@@ -133,8 +134,8 @@ void Problem::printall()
 		tmpc += v.capacity;
 	}
 	
-	std::cout << "\n\n" << deliveries.size() << " delivery points with a combined delivery qaunitity of " << tmpq << "." << std::endl;
+	std::cout << "\n\n" << deliveries.size() << " delivery points with a combined delivery quantity of " << tmpq << "." << std::endl;
 	std::cout << vehicles.size() << " delivery vehicles with a combined capacity of " << tmpc << "."
 		<< std::endl;
-	if(tmpc >0) std::cout << "Estimated minimum number dispatches per vehicle : " << (tmpq / tmpc) + 1 << "." << std::endl;
+	if(tmpc >0) std::cout << "Estimated minimum number of dispatches per vehicle : " << (tmpq / tmpc) + 1 << "." << std::endl;
 }

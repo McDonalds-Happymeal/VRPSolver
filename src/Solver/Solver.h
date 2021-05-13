@@ -66,6 +66,7 @@ inline double Solver::tspNI(std::vector<unsigned int>& points)
 	route.push_back(*(points.end() - 1));
 	points.pop_back();
 
+	//continue until all points are included in the route.
 	while (points.size() != 0) {
 		//find nearest point to any point in route
 		auto nearestPoint = points.begin();
@@ -82,6 +83,7 @@ inline double Solver::tspNI(std::vector<unsigned int>& points)
 		route.insert(route.begin(), *nearestPoint);
 		points.erase(nearestPoint);
 
+		//calculate route length for all permutations.
 		int bestPos = 0;
 		double bestRoute = routeDistance(route);
 		int tmp;
