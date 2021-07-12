@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VRPSolver", "VRPSolver.vcxproj", "{2B60267C-06BF-47A8-9AB6-07E303F1C4A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03573B0A-B331-4183-9325-A9465C605D80} = {03573B0A-B331-4183-9325-A9465C605D80}
+		{664E6F0D-6784-4760-9565-D54F8EB1EDF4} = {664E6F0D-6784-4760-9565-D54F8EB1EDF4}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CBCI", "dependencies\CBCI\CBCI.vcxproj", "{03573B0A-B331-4183-9325-A9465C605D80}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew_static", "dependencies\glew-2.1.0\build\vc12\glew_static.vcxproj", "{664E6F0D-6784-4760-9565-D54F8EB1EDF4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw", "dependencies\glfw-3.3.4\src\glfw.vcxproj", "{E80B189D-0DA8-3706-ABC5-DF9A77D99839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +75,18 @@ Global
 		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.RelWithDebInfo|x86.Build.0 = Release|Win32
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Debug|x64.ActiveCfg = Debug|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Debug|x64.Build.0 = Debug|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Debug|x86.ActiveCfg = Debug|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Release|x64.ActiveCfg = Release|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Release|x64.Build.0 = Release|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.Release|x86.ActiveCfg = Release|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{E80B189D-0DA8-3706-ABC5-DF9A77D99839}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
