@@ -9,7 +9,7 @@
 //#include "Solver/Solver.h"
 #include "Solver/TspNN.h"
 #include "Solver/VRP_Dantzig_Solver.h"
-#include "CBCI.h"
+#include "PetescppLibrary.h"
 #include "Utils.h"
 
 
@@ -146,8 +146,8 @@ int _vrpDRNR(int argc, std::string* argv) {
 int main(int argc, char** argv) {
 
     //creates main ui handler object with cursor type "_>"
-    CBCI::userinput ui("_>");
-    ui.addCommand(_ProblemInfo, "ProblemInfo", "Will print out all availible data on currently loaded Vehicle Routing problem.");
+    pmcl::userinput ui("_>");
+    ui.addCommand(_ProblemInfo, "ProblemInfo", "Will print out all available data on currently loaded Vehicle Routing problem.");
     ui.addCommand(_ProblemGen, "ProblemGen", "Will generate a new Vehicle routing problem, requires integer parameter for the number of points and capacity.\nExample: ProblemGen 10 50\n represents a problem with 10 points and a vehicle capacity of 50.");
     ui.addCommand(_ProblemSave, "ProblemSave", "Will save currently loaded problem, requires string parameter for file name.\nExample: ProblemGen problem1");
     ui.addCommand(_ProblemLoad, "ProblemLoad", "Will load selected .vrp file, requires string parameter for file name.\nExample: ProblemGen problem1");
